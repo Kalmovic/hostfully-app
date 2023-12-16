@@ -1,0 +1,116 @@
+.react-aria-RangeCalendar {
+  --highlight-background: indigo;
+  --highlight-foreground: white;
+  --button-background: var(--spectrum-global-color-gray-50);
+  --button-backgound-pressed: var(--spectrum-global-color-gray-100);
+  --button-border: var(--spectrum-global-color-gray-400);
+  --button-border-disabled: var(--spectrum-alias-border-color-disabled);
+  --text-color: var(--spectrum-alias-text-color);
+  --text-color-disabled: #b3b3b3;
+  --text-color-invalid: var(--spectrum-global-color-red-600);
+  --pressed-color: var(--spectrum-global-color-gray-200);
+  --unavailable-color: #ff0000;
+  --invalid-color: #ff0000;
+
+  width: fit-content;
+  max-width: 100%;
+  color: var(--text-color);
+
+  & header {
+    display: flex;
+    align-items: center;
+    margin: 0 4px 0.5rem 4px;
+
+    .react-aria-Heading {
+      flex: 1;
+      margin: 0;
+      text-align: center;
+      font-size: 1.375rem;
+    }
+  }
+
+  .react-aria-Button {
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+  }
+
+  & table {
+    border-collapse: collapse;
+
+    & td {
+      padding: 2px 0;
+    }
+  }
+
+  .react-aria-CalendarCell {
+    width: 2.286rem;
+    line-height: 2.286rem;
+    text-align: center;
+    border-radius: 6px;
+    cursor: default;
+    outline: none;
+
+    &[data-outside-month] {
+      display: none;
+    }
+
+    &[data-pressed] {
+      background: var(--pressed-color);
+    }
+
+    &[data-focus-visible] {
+      box-shadow: inset 0 0 0 2px var(--highlight-background);
+    }
+
+    &[data-selected] {
+      background: var(--highlight-background);
+      color: var(--highlight-foreground);
+      border-radius: 0;
+
+      &[data-focus-visible] {
+        box-shadow: inset 0 0 0 1px var(--highlight-background),
+          inset 0 0 0 3px var(--highlight-foreground);
+      }
+    }
+
+    &[data-selection-start] {
+      background-color: blue;
+      border-start-start-radius: 50%;
+      border-end-start-radius: 50%;
+    }
+
+    &[data-selection-end] {
+      border-start-end-radius: 50%;
+      border-end-end-radius: 50%;
+    }
+    &[data-disabled] {
+      color: var(--text-color-disabled);
+    }
+    &[data-unavailable] {
+      text-decoration: line-through;
+      color: var(--unavailable-color);
+    }
+
+    &[data-invalid] {
+      background: var(--invalid-color);
+      color: var(--highlight-foreground);
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .react-aria-RangeCalendar {
+    forced-color-adjust: none;
+
+    --highlight-background: Highlight;
+    --highlight-foreground: HighlightText;
+    --text-color: ButtonText;
+    --text-color-disabled: GrayText;
+    --text-color-invalid: LinkText;
+    --unavailable-color: GrayText;
+    --invalid-color: LinkText;
+    --pressed-color: Canvas;
+    --spectrum-alias-background-color-default: Canvas;
+  }
+}
