@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Card as RadixCard, Inset, Text, Flex } from "@radix-ui/themes";
+import { formatToDollar } from "../utils/formatCurrency";
 
 type CardProps = {
   img: string;
@@ -8,13 +9,6 @@ type CardProps = {
   hotelPrice: number;
   actionButtons?: React.ReactNode[];
 };
-
-const CardTitleWrapper = styled.div({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginBottom: 8,
-});
 
 export function Card(props: CardProps) {
   const { img, hotelName, hotelDescription, hotelPrice, actionButtons } = props;
@@ -33,19 +27,12 @@ export function Card(props: CardProps) {
           }}
         />
       </Inset>
-      <CardTitleWrapper>
-        <Text
-          as="p"
-          size="4"
-          weight="bold"
-          style={{ marginTop: 16, marginBottom: 8 }}
-        >
-          {hotelName}
-        </Text>
-        <Text as="p" size="3" style={{ marginTop: 16, marginBottom: 8 }}>
-          {hotelPrice}
-        </Text>
-      </CardTitleWrapper>
+      <Text as="p" size="4" weight="bold">
+        {hotelName}
+      </Text>
+      <Text color="jade" as="p" size="1" style={{ marginBottom: 8 }}>
+        Starting at {formatToDollar.format(hotelPrice)}
+      </Text>
       <Flex
         style={{
           flexDirection: "column",
