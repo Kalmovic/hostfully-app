@@ -30,6 +30,10 @@ const StyledButton = styled(RadixButton)<ButtonProps>(
     "&:hover": {
       opacity: variant === "disabled" ? 1 : 0.8,
     },
+    "&:focus": {
+      boxShadow: `0 0 0 2px ${theme.colors.primary}`,
+      border: "0.8px solid white",
+    },
   })
 );
 
@@ -37,7 +41,7 @@ export function Button(props: ButtonProps) {
   const { children, variant = "primary", ...rest } = props;
 
   return (
-    <StyledButton {...rest} variant={props.isDisabled ? "disabled" : variant}>
+    <StyledButton {...rest} variant={props.disabled ? "disabled" : variant}>
       {children}
     </StyledButton>
   );
