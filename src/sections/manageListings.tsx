@@ -33,7 +33,7 @@ export function ManageListings(props) {
       </Text>
       <Flex gap="4">
         <Table
-          actions={["edit", "delete"]}
+          actions={["edit", "cancel"]}
           headers={["id", "Name", "Period", "Price", "Status", "Actions"]}
           rows={rows}
         />

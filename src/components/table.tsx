@@ -16,7 +16,7 @@ import { useBookingStore } from "../providers/bookingsProvider";
 import { useHotelStore } from "../providers/hotelsProvider";
 
 type TableProps = {
-  actions: ["edit", "delete"];
+  actions: ["edit", "cancel"];
   headers: string[];
   rows: string[][];
 };
@@ -93,7 +93,7 @@ export function Table(props: TableProps) {
                             updateHotelAvailableDates({
                               id: row[1], // name
                               bookedRangeDates: dates,
-                              action: "add",
+                              action: "makeRangeAvailable",
                             });
                           }}
                         >

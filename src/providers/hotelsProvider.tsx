@@ -20,7 +20,7 @@ type HotelStore = {
   }: {
     id: string;
     bookedRangeDates: string[];
-    action?: "remove" | "add";
+    action?: "makeRangeUnvailable" | "makeRangeAvailable";
   }) => void;
 };
 
@@ -70,11 +70,15 @@ const initialState = {
 
 export const useHotelStore = create<HotelStore>((set) => ({
   ...initialState,
-  updateHotelAvailableDates: ({ id, bookedRangeDates, action = "remove" }) => {
+  updateHotelAvailableDates: ({
+    id,
+    bookedRangeDates,
+    action = "makeRangeUnvailable",
+  }) => {
     set((state) => {
       const updatedHotel = state.hotels.find((h) => h.title === id);
       if (updatedHotel) {
-        if (action === "remove") {
+        if (action === "makeRangeUnvailable") {
           updatedHotel.unavailableDates.push(bookedRangeDates);
         } else {
           updatedHotel.unavailableDates = updatedHotel.unavailableDates.filter(
