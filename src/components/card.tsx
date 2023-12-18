@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { Button } from "./button";
-import { Card as RadixCard, Inset, Text } from "@radix-ui/themes";
+import { Card as RadixCard, Inset, Text, Flex } from "@radix-ui/themes";
 
 type CardProps = {
   img: string;
   hotelName: string;
   hotelDescription: string;
   hotelPrice: number;
+  actionButtons?: React.ReactNode[];
 };
 
 const CardTitleWrapper = styled.div({
@@ -17,7 +17,7 @@ const CardTitleWrapper = styled.div({
 });
 
 export function Card(props: CardProps) {
-  const { img, hotelName, hotelDescription, hotelPrice } = props;
+  const { img, hotelName, hotelDescription, hotelPrice, actionButtons } = props;
 
   return (
     <CardWrapper size="2">
@@ -46,10 +46,27 @@ export function Card(props: CardProps) {
           {hotelPrice}
         </Text>
       </CardTitleWrapper>
-      <Text as="p" size="3">
-        {hotelDescription}
-      </Text>
-      <Button fullWidth>Click me</Button>
+      <Flex
+        style={{
+          flexDirection: "column",
+          alignItems: "flex-end",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Text
+          as="p"
+          size="1"
+          style={{
+            marginTop: 16,
+            marginBottom: 8,
+            height: 100,
+            overflow: "scroll",
+          }}
+        >
+          {hotelDescription}
+        </Text>
+        {actionButtons}
+      </Flex>
     </CardWrapper>
   );
 }
@@ -62,6 +79,7 @@ const CardWrapper = styled(RadixCard)({
   boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.2)",
   width: "100%",
   maxWidth: 240,
+  maxHeight: 400,
   img: {
     width: 200,
     height: 150,
