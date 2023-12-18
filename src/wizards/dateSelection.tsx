@@ -2,13 +2,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
-import {
-  DialogTitle,
-  DialogDescription,
-  Flex,
-  Text,
-  DialogClose,
-} from "@radix-ui/themes";
+import { DialogTitle, DialogDescription, Flex, Text } from "@radix-ui/themes";
 import { BookCalendar } from "../components/range-calendar";
 import { Button } from "../components/button";
 import { ManualInput } from "../components/manualInput";
@@ -22,19 +16,37 @@ type DateSelectionForm = {
   numberOfRooms: number;
 };
 
-type PropsType = {
-  data: {
-    startDate?: string;
-    endDate?: string;
-    totalPrice?: number;
-    numberOfAdults?: number;
-    numberOfChildren?: number;
-    numberOfRooms?: number;
-  };
-  onSubmit: (data: DateSelectionForm) => void;
-  unavailableDates: string[][];
-  defaultPrice: number;
-};
+type PropsType =
+  | {
+      mode: "edit";
+      data: {
+        startDate: string;
+        endDate: string;
+        totalPrice: number;
+        numberOfAdults: number;
+        numberOfChildren: number;
+        numberOfRooms: number;
+      };
+      onSubmit: (data: DateSelectionForm) => void;
+      unavailableDates: string[][];
+      defaultPrice: number;
+      cancelButton: React.ReactNode;
+    }
+  | {
+      mode: "create";
+      data: {
+        startDate?: string;
+        endDate?: string;
+        totalPrice?: number;
+        numberOfAdults?: number;
+        numberOfChildren?: number;
+        numberOfRooms?: number;
+      };
+      onSubmit: (data: DateSelectionForm) => void;
+      unavailableDates: string[][];
+      defaultPrice: number;
+      cancelButton: React.ReactNode;
+    };
 
 const schema = () =>
   yup.object().shape({
@@ -52,7 +64,17 @@ export function DateSelection(props: PropsType) {
   const { handleSubmit, formState, watch, control, setValue } =
     useForm<DateSelectionForm>({
       resolver: yupResolver(validationSchema),
-      defaultValues: props.data,
+      defaultValues:
+        props.mode === "edit"
+          ? props.data
+          : {
+              startDate: "",
+              endDate: "",
+              totalPrice: 0,
+              numberOfAdults: 1,
+              numberOfChildren: 0,
+              numberOfRooms: 1,
+            },
     });
 
   const numberOfAdults = watch("numberOfAdults");
@@ -80,11 +102,10 @@ export function DateSelection(props: PropsType) {
           <Controller
             control={control}
             name="numberOfAdults"
-            defaultValue={1}
             render={({ field }) => (
               <ManualInput
                 label="Adults"
-                initialValue="1"
+                initialValue={`${props.data.numberOfAdults || 1}`}
                 minimumValue="1"
                 onChange={(value) => {
                   field.onChange(value);
@@ -95,11 +116,10 @@ export function DateSelection(props: PropsType) {
           <Controller
             control={control}
             name="numberOfChildren"
-            defaultValue={0}
             render={({ field }) => (
               <ManualInput
                 label="Children"
-                initialValue="0"
+                initialValue={`${props.data.numberOfChildren || 0}`}
                 onChange={(value) => {
                   field.onChange(value);
                 }}
@@ -109,11 +129,10 @@ export function DateSelection(props: PropsType) {
           <Controller
             control={control}
             name="numberOfRooms"
-            defaultValue={1}
             render={({ field }) => (
               <ManualInput
                 label="Rooms"
-                initialValue="1"
+                initialValue={`${props.data.numberOfRooms || 1}`}
                 minimumValue="1"
                 onChange={(value) => {
                   field.onChange(value);
@@ -128,6 +147,11 @@ export function DateSelection(props: PropsType) {
           numberOfRooms={numberOfRooms}
           unavailableDates={props.unavailableDates}
           defaultPrice={props.defaultPrice}
+          defaultValue={{
+            start: props.data.startDate || "",
+            end: props.data.endDate || "",
+            totalPrice: props.data.totalPrice || 0,
+          }}
           onChange={(dates) => {
             setValue("startDate", dates.start, { shouldValidate: true });
             setValue("endDate", dates.end, { shouldValidate: true });
@@ -141,9 +165,7 @@ export function DateSelection(props: PropsType) {
       <Flex mt="4" justify="between">
         <Text>Total price: {watch("totalPrice")}</Text>
         <Flex gap="3">
-          <DialogClose>
-            <Button variant="secondary">Cancel</Button>
-          </DialogClose>
+          {props.cancelButton}
           <Button disabled={!formState.isValid} variant="primary" type="submit">
             Continue
           </Button>

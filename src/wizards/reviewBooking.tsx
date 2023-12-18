@@ -28,6 +28,7 @@ type ReviewBookingData = {
     numberOfRooms: number;
   };
   onSubmit: () => void;
+  cancelButton: React.ReactNode;
 };
 
 const StyledLineInfo = styled("div")({
@@ -40,7 +41,11 @@ const StyledLineInfo = styled("div")({
   gap: "1",
 });
 
-export function ReviewBooking({ data, onSubmit }: ReviewBookingData) {
+export function ReviewBooking({
+  data,
+  onSubmit,
+  cancelButton,
+}: ReviewBookingData) {
   const { handleSubmit } = useForm<ReviewBookingData>();
 
   return (
@@ -80,16 +85,6 @@ export function ReviewBooking({ data, onSubmit }: ReviewBookingData) {
           >
             {/* {data.numberOfAdults} adults, {data.numberOfChildren} children */}
             <Flex gap="1" align="center">
-              <BedDouble size="15px" color={theme.colors.black} />
-              <Text size="2">{data.numberOfRooms} </Text>
-            </Flex>
-            <Separator
-              orientation="vertical"
-              style={{
-                backgroundColor: theme.colors.black,
-              }}
-            />
-            <Flex gap="1" align="center">
               <Users size="15px" color={theme.colors.black} />
               <Text size="2">{data.numberOfAdults} </Text>
             </Flex>
@@ -100,8 +95,18 @@ export function ReviewBooking({ data, onSubmit }: ReviewBookingData) {
               }}
             />
             <Flex gap="1" align="center">
+              <BedDouble size="15px" color={theme.colors.black} />
+              <Text size="2">{data.numberOfRooms} </Text>
+            </Flex>
+            <Separator
+              orientation="vertical"
+              style={{
+                backgroundColor: theme.colors.black,
+              }}
+            />
+            <Flex gap="1" align="center">
               <Baby size="15px" color={theme.colors.black} />
-              <Text size="2">{data.numberOfAdults} </Text>
+              <Text size="2">{data.numberOfChildren} </Text>
             </Flex>
           </Flex>
         </StyledLineInfo>
@@ -121,9 +126,7 @@ export function ReviewBooking({ data, onSubmit }: ReviewBookingData) {
         </StyledLineInfo>
       </Flex>
       <Flex gap="3" mt="4" justify="end">
-        <DialogClose>
-          <Button variant="secondary">Cancel</Button>
-        </DialogClose>
+        {cancelButton}
         <DialogClose>
           <Button type="submit">Continue</Button>
         </DialogClose>

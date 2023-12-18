@@ -1,4 +1,3 @@
-import React from "react";
 import { Card } from "../components/card";
 import styled from "styled-components";
 import { useHotelStore } from "../providers/hotelsProvider";
@@ -6,12 +5,12 @@ import { Button } from "../components/button";
 import { Dialog } from "../components/dialog";
 import { BookingWizard } from "../wizards/bookingWizard";
 
-const ExploreWrapper = styled.div(({ theme }) => ({
+const ExploreWrapper = styled.div({
   display: "flex",
   flexDirection: "row",
   flexWrap: "wrap",
   gap: 16,
-}));
+});
 
 export function Explore() {
   const hotels = useHotelStore((state) => state.hotels);
@@ -28,7 +27,8 @@ export function Explore() {
             <Dialog
               children={
                 <BookingWizard
-                  hotelId={hotel.id}
+                  mode="create"
+                  hotelTitle={hotel.title}
                   hotelDefaultPrice={hotel.defaultPrice}
                 />
               }

@@ -5,6 +5,8 @@ import { UserInfo } from "./userInfo";
 import { useHotelStore } from "../providers/hotelsProvider";
 import { useBookingStore } from "../providers/bookingsProvider";
 import { formatToDollar } from "../utils/formatCurrency";
+import { DialogClose } from "@radix-ui/themes";
+import { Button } from "../components/button";
 
 enum BookingSteps {
   DATE_SELECTION = "DATE_SELECTION",
@@ -77,31 +79,84 @@ const Wrapper = ({ children }) => {
   );
 };
 
+type BookingWizardProps =
+  | {
+      mode: "create";
+      hotelTitle: string;
+      hotelDefaultPrice: number;
+      defaultBookingInfo?: {
+        startDate?: string;
+        endDate?: string;
+        totalPrice?: number;
+        numberOfAdults?: number;
+        numberOfChildren?: number;
+        numberOfRooms?: number;
+      };
+    }
+  | {
+      mode: "edit";
+      bookingId: string;
+      hotelTitle: string;
+      hotelDefaultPrice: number;
+      defaultBookingInfo: {
+        startDate: string;
+        endDate: string;
+        totalPrice: number;
+        numberOfAdults: number;
+        numberOfChildren: number;
+        numberOfRooms: number;
+      };
+    };
+
 export function BookingWizard({
-  hotelId,
+  hotelTitle,
   hotelDefaultPrice,
-}: {
-  hotelId: number;
-  hotelDefaultPrice: number;
-}) {
+  ...props
+}: BookingWizardProps) {
   const [wizardState, setWizardState] = React.useState<WizardState>({
     kind: BookingSteps.DATE_SELECTION,
-    data: {},
+    data: props.mode === "edit" ? props.defaultBookingInfo : {},
   });
   const addBooking = useBookingStore((state) => state.addBooking);
+  const updateBooking = useBookingStore((state) => state.updateBooking);
 
   const updateHotelAvailableDates = useHotelStore(
     (state) => state.updateHotelAvailableDates
   );
   const hotels = useHotelStore((state) => state.hotels);
 
-  const hotel = hotels.find((hotel) => hotel.id === hotelId);
+  const hotel = hotels.find((hotel) => hotel.title === hotelTitle);
+
+  useEffect(() => {
+    if (props.mode === "edit") {
+      updateHotelAvailableDates({
+        id: hotel.title,
+        bookedRangeDates: [
+          props.defaultBookingInfo.startDate,
+          props.defaultBookingInfo.endDate,
+        ],
+        action: "makeRangeAvailable",
+      });
+    }
+  }, [props.mode, hotel.title]);
 
   useEffect(() => {
     return () => {
       resetWizardState();
     };
   }, []);
+
+  const onUpdateCancel = () => {
+    if (props.mode === "create") return;
+    updateHotelAvailableDates({
+      id: hotel.title,
+      bookedRangeDates: [
+        props.defaultBookingInfo.startDate,
+        props.defaultBookingInfo.endDate,
+      ],
+      action: "makeRangeUnvailable",
+    });
+  };
 
   const changeWizardState = (kind, data) => {
     setWizardState({
@@ -133,39 +188,84 @@ export function BookingWizard({
       id: hotel.title,
       bookedRangeDates: [bookingInfo.startDate, bookingInfo.endDate],
     });
-    addBooking({
-      description: hotel.description,
-      endDate: bookingInfo.endDate,
-      id: hotel.id,
-      image: hotel.image,
-      location: hotel.location,
-      price: formatToDollar.format(bookingInfo.totalPrice),
-      startDate: bookingInfo.startDate,
-      title: hotel.title,
-      status: "Active",
-    });
-  };
-
-  const onEditFormSubmit = (formData: ReviewBookingData["data"]) => {
-    changeWizardState(BookingSteps.DATE_SELECTION, formData);
+    if (props.mode === "edit") {
+      updateBooking(props.bookingId, {
+        ...bookingInfo,
+        description: hotel.description,
+        id: props.bookingId,
+        image: hotel.image,
+        location: hotel.location,
+        price: formatToDollar.format(bookingInfo.totalPrice),
+        title: hotel.title,
+        status: "Active",
+      });
+    } else {
+      addBooking({
+        description: hotel.description,
+        id: hotel.id,
+        image: hotel.image,
+        location: hotel.location,
+        price: formatToDollar.format(bookingInfo.totalPrice),
+        title: hotel.title,
+        ...bookingInfo,
+        status: "Active",
+      });
+    }
   };
 
   switch (wizardState.kind) {
     case BookingSteps.DATE_SELECTION:
       return (
         <Wrapper>
-          <DateSelection
-            data={wizardState.data}
-            onSubmit={onDateSelectionSubmit}
-            unavailableDates={hotel.unavailableDates}
-            defaultPrice={hotelDefaultPrice}
-          />
+          {props.mode === "edit" ? (
+            <DateSelection
+              mode={props.mode}
+              data={props.defaultBookingInfo}
+              cancelButton={
+                <DialogClose
+                  onClick={() =>
+                    props.mode === "edit" ? onUpdateCancel() : null
+                  }
+                >
+                  <Button variant="secondary">Cancel</Button>
+                </DialogClose>
+              }
+              onSubmit={onDateSelectionSubmit}
+              unavailableDates={hotel.unavailableDates}
+              defaultPrice={hotelDefaultPrice}
+            />
+          ) : (
+            <DateSelection
+              mode={props.mode}
+              data={wizardState.data}
+              cancelButton={
+                <DialogClose>
+                  <Button variant="secondary">Cancel</Button>
+                </DialogClose>
+              }
+              onSubmit={onDateSelectionSubmit}
+              unavailableDates={hotel.unavailableDates}
+              defaultPrice={hotelDefaultPrice}
+            />
+          )}
         </Wrapper>
       );
     case BookingSteps.USER_INFO:
       return (
         <Wrapper>
-          <UserInfo data={wizardState.data} onSubmit={onUserInfoFormSubmit} />
+          <UserInfo
+            data={wizardState.data}
+            cancelButton={
+              <DialogClose
+                onClick={() =>
+                  props.mode === "edit" ? onUpdateCancel() : null
+                }
+              >
+                <Button variant="secondary">Cancel</Button>
+              </DialogClose>
+            }
+            onSubmit={onUserInfoFormSubmit}
+          />
         </Wrapper>
       );
     case BookingSteps.REVIEW_BOOKING:
@@ -173,7 +273,15 @@ export function BookingWizard({
         <Wrapper>
           <ReviewBooking
             data={wizardState.data}
-            onEdit={onEditFormSubmit}
+            cancelButton={
+              <DialogClose
+                onClick={() =>
+                  props.mode === "edit" ? onUpdateCancel() : null
+                }
+              >
+                <Button variant="secondary">Cancel</Button>
+              </DialogClose>
+            }
             onSubmit={() => onReviewBookingSubmit(wizardState.data)}
           />
         </Wrapper>

@@ -9,6 +9,13 @@ type Booking = {
   image: string;
   startDate: string;
   endDate: string;
+  numberOfAdults: number;
+  numberOfChildren: number;
+  numberOfRooms: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  creditCardNumber: string;
   status: "Active" | "Cancelled";
 };
 

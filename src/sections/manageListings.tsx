@@ -3,21 +3,62 @@ import styled from "styled-components";
 import { Flex, Text } from "@radix-ui/themes";
 import { useBookingStore } from "../providers/bookingsProvider";
 
-const Wrapper = styled.section(({ theme }) => ({
+const Wrapper = styled.section({
   display: "flex",
   flexDirection: "column",
   width: "100%",
-}));
+});
 
-export function ManageListings(props) {
+export function ManageListings() {
   const bookings = useBookingStore((state) => state.bookings);
 
   const rows = bookings.map((booking) => [
-    booking.id,
-    booking.title,
-    `${booking.startDate} - ${booking.endDate}`,
-    booking.price,
-    booking.status,
+    {
+      rowKey: "id",
+      content: booking.id,
+    },
+    {
+      rowKey: "title",
+      content: booking.title,
+    },
+    {
+      rowKey: "period",
+      content: [
+        {
+          title: "Start Date",
+          value: booking.startDate,
+        },
+        {
+          title: "End Date",
+          value: booking.endDate,
+        },
+      ],
+    },
+    {
+      rowKey: "bookingDetails",
+      content: [
+        {
+          title: "Adults",
+          value: booking.numberOfAdults,
+        },
+        {
+          title: "Children",
+          value: booking.numberOfChildren,
+        },
+        {
+          title: "Rooms",
+          value: booking.numberOfRooms,
+        },
+      ],
+    },
+    {
+      rowKey: "price",
+      content: booking.price,
+    },
+    {
+      rowKey: "status",
+      content: booking.status,
+    },
   ]);
 
   return (
@@ -34,7 +75,15 @@ export function ManageListings(props) {
       <Flex gap="4">
         <Table
           actions={["edit", "cancel"]}
-          headers={["id", "Name", "Period", "Price", "Status", "Actions"]}
+          headers={[
+            "id",
+            "Name",
+            "Period",
+            "Booking Details",
+            "Price",
+            "Status",
+            "Actions",
+          ]}
           rows={rows}
         />
       </Flex>

@@ -32,6 +32,7 @@ type UserInfoProps = {
     creditCardNumber?: string;
   };
   onSubmit: (data: UserInfoForm) => void;
+  cancelButton: React.ReactNode;
 };
 
 export function UserInfo(props: UserInfoProps) {
@@ -97,9 +98,7 @@ export function UserInfo(props: UserInfoProps) {
       </Flex>
 
       <Flex gap="3" mt="4" justify="end">
-        <DialogClose>
-          <Button variant="secondary">Cancel</Button>
-        </DialogClose>
+        {props.cancelButton}
         <Button disabled={!formState.isValid} type="submit">
           Continue
         </Button>

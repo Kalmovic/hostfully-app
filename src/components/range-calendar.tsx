@@ -27,6 +27,7 @@ type BookCalenderProps = {
   numberOfRooms?: number;
   unavailableDates?: string[][];
   defaultPrice: number;
+  defaultValue?: { start: string; end: string; totalPrice: number };
 };
 
 export function BookCalendar({
@@ -36,11 +37,12 @@ export function BookCalendar({
   onChange,
   unavailableDates,
   defaultPrice,
+  defaultValue,
 }: BookCalenderProps) {
   const [calendarInfo, setCalendarInfo] = React.useState({
-    start: "",
-    end: "",
-    totalPrice: 0,
+    start: defaultValue?.start || "",
+    end: defaultValue?.end || "",
+    totalPrice: defaultValue?.totalPrice || 0,
   });
   React.useEffect(() => {
     updateTotalPrice();
@@ -138,6 +140,14 @@ export function BookCalendar({
         visibleDuration={{ months: 2 }}
         pageBehavior="visible"
         minValue={now}
+        defaultValue={
+          defaultValue.start
+            ? {
+                start: parseDate(defaultValue.start),
+                end: parseDate(defaultValue.end),
+              }
+            : undefined
+        }
         isDateUnavailable={isDateUnavailable}
         onChange={onChangeDates}
         style={{
