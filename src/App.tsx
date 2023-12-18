@@ -1,9 +1,8 @@
-import { Card } from "./components/card";
 import { Tabs } from "./components/tabs";
-import img from "./assets/bookingImg1.png";
 import { Text } from "@radix-ui/themes";
 import { ManageListings } from "./sections/manageListings";
 import styled from "styled-components";
+import { Explore } from "./sections/explore";
 
 const AppWrapper = styled.div(({ theme }) => ({
   display: "flex",
@@ -28,14 +27,7 @@ function App() {
       <Tabs
         tabs={[
           {
-            children: (
-              <Card
-                img={img}
-                hotelName="Hotel 1"
-                hotelDescription="Hotel 1 description"
-                hotelPrice={100}
-              />
-            ),
+            children: <Explore />,
             name: "Explore",
             value: "explore",
           },
