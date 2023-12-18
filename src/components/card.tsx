@@ -72,4 +72,7 @@ const CardWrapper = styled(RadixCard)({
     height: 150,
     objectFit: "fill",
   },
+  "@media (max-width: 768px)": {
+    maxWidth: "unset",
+  },
 });
