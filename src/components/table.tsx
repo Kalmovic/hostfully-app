@@ -30,17 +30,14 @@ const StyledTable = styled(TableRoot)(({ theme }) => ({
   backgroundColor: theme.colors.white,
 }));
 
-const StyledTableHeader = styled(TableHeader)(({ theme }) => ({}));
-
-const StyledColumnHeaderCell = styled(TableColumnHeaderCell)(({ theme }) => ({
-  // color: theme.colors.primary,
+const StyledColumnHeaderCell = styled(TableColumnHeaderCell)({
   fontWeight: 500,
   border: "none",
-}));
+});
 
-const StyledRow = styled(TableRow)(({ theme }) => ({
+const StyledRow = styled(TableRow)({
   border: "none",
-}));
+});
 
 export function Table(props: TableProps) {
   const deleteBooking = useBookingStore((state) => state.deleteBooking);
@@ -50,13 +47,13 @@ export function Table(props: TableProps) {
 
   return (
     <StyledTable variant="ghost">
-      <StyledTableHeader>
+      <TableHeader>
         <TableRow>
           {props.headers.map((header) => (
             <StyledColumnHeaderCell>{header}</StyledColumnHeaderCell>
           ))}
         </TableRow>
-      </StyledTableHeader>
+      </TableHeader>
       <TableBody>
         {props.rows.map((row, i) => {
           const dates = row[2].split(" - ");
