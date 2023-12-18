@@ -1,8 +1,7 @@
 import { Table } from "../components/table";
 import styled from "styled-components";
 import { Flex, Text } from "@radix-ui/themes";
-import { Calendar } from "../components/calendar";
-import { BookCalendar } from "../components/range-calendar";
+import { useBookingStore } from "../providers/bookingsProvider";
 
 const Wrapper = styled.section(({ theme }) => ({
   display: "flex",
@@ -11,6 +10,16 @@ const Wrapper = styled.section(({ theme }) => ({
 }));
 
 export function ManageListings(props) {
+  const bookings = useBookingStore((state) => state.bookings);
+
+  const rows = bookings.map((booking) => [
+    booking.id,
+    booking.title,
+    `${booking.startDate} - ${booking.endDate}`,
+    booking.price,
+    booking.status,
+  ]);
+
   return (
     <Wrapper>
       <Text
@@ -25,16 +34,10 @@ export function ManageListings(props) {
       <Flex gap="4">
         <Table
           actions={["edit", "delete"]}
-          headers={["Name", "Description", "Price", "Status", "Actions"]}
-          rows={[
-            ["Hotel 1", "Hotel 1 description", "100"],
-            ["Hotel 2", "Hotel 2 description", "200"],
-            ["Hotel 3", "Hotel 3 description", "300"],
-          ]}
+          headers={["id", "Name", "Period", "Price", "Status", "Actions"]}
+          rows={rows}
         />
-        <Calendar />
       </Flex>
-      <BookCalendar />
     </Wrapper>
   );
 }
