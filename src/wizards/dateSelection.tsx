@@ -6,6 +6,8 @@ import { DialogTitle, DialogDescription, Flex, Text } from "@radix-ui/themes";
 import { BookCalendar } from "../components/range-calendar";
 import { Button } from "../components/button";
 import { ManualInput } from "../components/manualInput";
+import styled from "styled-components";
+import { formatToDollar } from "../utils/formatCurrency";
 
 type DateSelectionForm = {
   startDate: string;
@@ -89,16 +91,7 @@ export function DateSelection(props: PropsType) {
         book and check the availability.
       </DialogDescription>
       <Flex direction="column" gap="3" width="100%">
-        <Flex
-          gap="3"
-          p="1"
-          justify="between"
-          width="100%"
-          style={{
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-          }}
-        >
+        <StyledBookingDetailsWrapper>
           <Controller
             control={control}
             name="numberOfAdults"
@@ -140,7 +133,7 @@ export function DateSelection(props: PropsType) {
               />
             )}
           />
-        </Flex>
+        </StyledBookingDetailsWrapper>
         <BookCalendar
           numberOfAdults={numberOfAdults}
           numberOfChildren={numberOfChildren}
@@ -160,17 +153,58 @@ export function DateSelection(props: PropsType) {
             });
           }}
         />
-      </Flex>
-
-      <Flex mt="4" justify="between">
-        <Text>Total price: {watch("totalPrice")}</Text>
-        <Flex gap="3">
-          {props.cancelButton}
-          <Button disabled={!formState.isValid} variant="primary" type="submit">
-            Continue
-          </Button>
-        </Flex>
+        <StyledFooterWrapper>
+          <Text align="center">
+            Total price: {formatToDollar.format(watch("totalPrice") || 0)}
+          </Text>
+          <StyledButtonsGrid>
+            {props.cancelButton}
+            <Button
+              fullWidth
+              disabled={!formState.isValid}
+              variant="primary"
+              type="submit"
+            >
+              Continue
+            </Button>
+          </StyledButtonsGrid>
+        </StyledFooterWrapper>
       </Flex>
     </form>
   );
 }
+
+const StyledButtonsGrid = styled("div")({
+  display: "grid",
+  gridTemplateColumns: "repeat(2, 1fr)",
+  gap: "1rem",
+  "@media (max-width: 590px)": {
+    gridTemplateColumns: "1fr",
+  },
+});
+
+const StyledFooterWrapper = styled(Flex)({
+  marginTop: "0.25rem",
+  justifyContent: "space-between",
+  alignItems: "center",
+  "@media (max-width: 590px)": {
+    flexDirection: "column",
+    gap: "0.5rem",
+    alignItems: "end",
+  },
+});
+
+const StyledBookingDetailsWrapper = styled(Flex)({
+  border: "1px solid #ccc",
+  borderRadius: "4px",
+  justifyContent: "space-between",
+  padding: "0.2rem",
+  "@media (max-width: 590px)": {
+    border: "none",
+    alignItems: "end",
+    justifyContent: "flex-end",
+    flexDirection: "column",
+    gap: "0.5rem",
+    padding: "0.25rem 0.25rem",
+  },
+});

@@ -1,11 +1,12 @@
 import React from "react";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import {
   RangeCalendar,
   CalendarGrid,
   CalendarCell,
   Heading,
   DateValue,
+  Button,
 } from "react-aria-components";
 import {
   today,
@@ -13,12 +14,15 @@ import {
   CalendarDate,
   toCalendarDate,
   parseDate,
+  parseDateTime,
+  parseAbsoluteToLocal,
 } from "@internationalized/date";
-import { IconButton, Text } from "@radix-ui/themes";
+import { Text } from "@radix-ui/themes";
 import { I18nProvider } from "@react-aria/i18n";
 import { theme } from "../providers/theme";
 import { CaretLeftIcon, CaretRightIcon } from "@radix-ui/react-icons";
 import "./range-calendar.css";
+import styled from "styled-components";
 
 type BookCalenderProps = {
   onChange: (date: { start: string; end: string; totalPrice: number }) => void;
@@ -39,6 +43,7 @@ export function BookCalendar({
   defaultPrice,
   defaultValue,
 }: BookCalenderProps) {
+  const isMobile = window.innerWidth <= 767;
   const [calendarInfo, setCalendarInfo] = React.useState({
     start: defaultValue?.start || "",
     end: defaultValue?.end || "",
@@ -122,32 +127,74 @@ export function BookCalendar({
 
   const onChangeDates = (date: RangeValue<DateValue>) => {
     // array of dates between start and end
+    const start = format(date.start.toDate(getLocalTimeZone()), "yyyy-MM-dd");
+    const end = format(date.end.toDate(getLocalTimeZone()), "yyyy-MM-dd");
     setCalendarInfo({
-      start: `${date.start.year}-${date.start.month}-${date.start.day}`,
-      end: `${date.end.year}-${date.end.month}-${date.end.day}`,
+      start,
+      end,
       totalPrice: calculateTotalPrice(date.start, date.end),
     });
     return onChange({
-      start: `${date.start.year}-${date.start.month}-${date.start.day}`,
-      end: `${date.end.year}-${date.end.month}-${date.end.day}`,
+      start,
+      end,
       totalPrice: calculateTotalPrice(date.start, date.end),
     });
+  };
+  const placeholderValue = () => {
+    if (!defaultValue?.start) return undefined;
+    const isoStartDate = format(parseISO(defaultValue?.start), "yyyy-MM-dd");
+    const isoEndDate = format(parseISO(defaultValue?.end), "yyyy-MM-dd");
+    let start;
+    let end;
+
+    try {
+      start = parseDateTime(isoStartDate);
+      end = parseDateTime(isoEndDate);
+    } catch (e) {
+      try {
+        start = parseDate(isoStartDate);
+        end = parseDate(isoEndDate);
+      } catch (e) {
+        try {
+          start = parseDate(isoStartDate).add({
+            days: 1,
+          });
+          end = parseDate(isoEndDate).add({
+            days: 1,
+          });
+        } catch (e) {
+          try {
+            start = parseAbsoluteToLocal(isoStartDate);
+            end = parseAbsoluteToLocal(isoEndDate);
+          } catch (e) {
+            try {
+              start = parseAbsoluteToLocal(isoStartDate).add({
+                days: 1,
+              });
+              end = parseAbsoluteToLocal(isoEndDate).add({
+                days: 1,
+              });
+            } catch (e) {
+              console.log("Invalid date format", e);
+            }
+          }
+        }
+      }
+    }
+
+    return {
+      start,
+      end,
+    };
   };
   return (
     <I18nProvider locale="en">
       <RangeCalendar
         aria-label="Trip dates"
-        visibleDuration={{ months: 2 }}
+        visibleDuration={{ months: isMobile ? 1 : 2 }}
         pageBehavior="visible"
         minValue={now}
-        defaultValue={
-          defaultValue.start
-            ? {
-                start: parseDate(defaultValue.start),
-                end: parseDate(defaultValue.end),
-              }
-            : undefined
-        }
+        defaultValue={placeholderValue()}
         isDateUnavailable={isDateUnavailable}
         onChange={onChangeDates}
         style={{
@@ -156,17 +203,18 @@ export function BookCalendar({
         }}
       >
         <header>
-          <IconButton
-            slot="next"
-            color="indigo"
-            variant="outline"
-            size="2"
+          <Button
+            slot="previous"
             style={{
               boxShadow: "none",
+              outline: "none",
+              border: "0.8px solid indigo",
+              borderRadius: "10%",
+              backgroundColor: theme.colors.surface,
             }}
           >
             <CaretLeftIcon width={24} height={24} />
-          </IconButton>
+          </Button>
           <Heading
             style={{
               fontSize: 16,
@@ -174,26 +222,20 @@ export function BookCalendar({
               margin: 0,
             }}
           />
-          <IconButton
+          <Button
             slot="next"
-            color="indigo"
-            variant="outline"
-            size="2"
             style={{
               boxShadow: "none",
+              outline: "none",
+              border: "0.8px solid indigo",
+              borderRadius: "10%",
+              backgroundColor: theme.colors.surface,
             }}
           >
             <CaretRightIcon width={24} height={24} />
-          </IconButton>
+          </Button>
         </header>
-        <div
-          style={{
-            display: "flex",
-            gap: 30,
-            overflow: "auto",
-            justifyContent: "center",
-          }}
-        >
+        <StyledCalendarWrapper>
           <CalendarGrid>
             {(date) => (
               <CalendarCell
@@ -220,33 +262,47 @@ export function BookCalendar({
               </CalendarCell>
             )}
           </CalendarGrid>
-          <CalendarGrid offset={{ months: 1 }}>
-            {(date) => (
-              <CalendarCell
-                date={date}
-                style={{
-                  gap: 0.2,
-                }}
-              >
-                <div
+          {isMobile ? null : (
+            <CalendarGrid offset={{ months: 1 }}>
+              {(date) => (
+                <CalendarCell
+                  date={date}
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
                     gap: 0.2,
-                    width: "40px",
-                    height: "40px",
                   }}
                 >
-                  <Text size="2">{date.day}</Text>
-                  <Text size="1">{calculateDayPrice(date)}</Text>
-                </div>
-              </CalendarCell>
-            )}
-          </CalendarGrid>
-        </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: 0.2,
+                      width: "40px",
+                      height: "40px",
+                    }}
+                  >
+                    <Text size="2">{date.day}</Text>
+                    <Text size="1">{calculateDayPrice(date)}</Text>
+                  </div>
+                </CalendarCell>
+              )}
+            </CalendarGrid>
+          )}
+        </StyledCalendarWrapper>
       </RangeCalendar>
     </I18nProvider>
   );
 }
+
+const StyledCalendarWrapper = styled("div")({
+  display: "flex",
+  flexDirection: "row",
+  width: "100%",
+  gap: 15,
+  justifyContent: "center",
+  padding: "0.5rem",
+  "@media (max-width: 591px)": {
+    flexDirection: "column",
+  },
+});

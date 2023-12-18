@@ -6,9 +6,9 @@ import {
   DialogDescription,
   TextField,
   Flex,
-  DialogClose,
 } from "@radix-ui/themes";
 import { Button } from "../components/button";
+import styled from "styled-components";
 type UserInfoForm = {
   firstName: string;
   lastName: string;
@@ -95,14 +95,27 @@ export function UserInfo(props: UserInfoProps) {
             />
           )}
         />
-      </Flex>
-
-      <Flex gap="3" mt="4" justify="end">
-        {props.cancelButton}
-        <Button disabled={!formState.isValid} type="submit">
-          Continue
-        </Button>
+        <StyledButtonsGrid>
+          {props.cancelButton}
+          <Button
+            fullWidth
+            disabled={!formState.isValid}
+            variant="primary"
+            type="submit"
+          >
+            Continue
+          </Button>
+        </StyledButtonsGrid>
       </Flex>
     </form>
   );
 }
+
+const StyledButtonsGrid = styled("div")({
+  display: "grid",
+  gridTemplateColumns: "repeat(2, 1fr)",
+  gap: "1rem",
+  "@media (max-width: 590px)": {
+    gridTemplateColumns: "1fr",
+  },
+});

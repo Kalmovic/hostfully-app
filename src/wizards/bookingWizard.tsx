@@ -95,7 +95,7 @@ type BookingWizardProps =
     }
   | {
       mode: "edit";
-      bookingId: string;
+      bookingId: number;
       hotelTitle: string;
       hotelDefaultPrice: number;
       defaultBookingInfo: {
@@ -125,7 +125,7 @@ export function BookingWizard({
   );
   const hotels = useHotelStore((state) => state.hotels);
 
-  const hotel = hotels.find((hotel) => hotel.title === hotelTitle);
+  const hotel = hotels.find((hotel) => hotel.title === hotelTitle)!;
 
   useEffect(() => {
     if (props.mode === "edit") {
@@ -142,9 +142,9 @@ export function BookingWizard({
 
   useEffect(() => {
     return () => {
-      resetWizardState();
+      props.mode === "edit" ? onUpdateCancel() : null;
     };
-  }, []);
+  }, [props.mode]);
 
   const onUpdateCancel = () => {
     if (props.mode === "create") return;
@@ -165,13 +165,6 @@ export function BookingWizard({
         ...wizardState.data,
         ...data,
       },
-    });
-  };
-
-  const resetWizardState = () => {
-    setWizardState({
-      kind: BookingSteps.DATE_SELECTION,
-      data: {},
     });
   };
 
@@ -256,11 +249,7 @@ export function BookingWizard({
           <UserInfo
             data={wizardState.data}
             cancelButton={
-              <DialogClose
-                onClick={() =>
-                  props.mode === "edit" ? onUpdateCancel() : null
-                }
-              >
+              <DialogClose>
                 <Button variant="secondary">Cancel</Button>
               </DialogClose>
             }

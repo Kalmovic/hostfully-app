@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/themes";
 import { Baby, BedDouble, Users } from "lucide-react";
 import { Button } from "../components/button";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { theme } from "../providers/theme";
 import styled from "styled-components";
 import { formatToDollar } from "../utils/formatCurrency";
@@ -67,8 +67,8 @@ export function ReviewBooking({
               padding: "0.25rem 0.5rem",
             }}
           >
-            {format(new Date(data.startDate), "MM/dd/yyyy")} to{" "}
-            {format(new Date(data.endDate), "MM/dd/yyyy")}
+            {format(parseISO(data.startDate), "MM/dd/yyyy")} to{" "}
+            {format(parseISO(data.endDate), "MM/dd/yyyy")}
           </Text>
         </StyledLineInfo>
         <StyledLineInfo>
@@ -83,7 +83,6 @@ export function ReviewBooking({
               padding: "0.25rem 0.5rem",
             }}
           >
-            {/* {data.numberOfAdults} adults, {data.numberOfChildren} children */}
             <Flex gap="1" align="center">
               <Users size="15px" color={theme.colors.black} />
               <Text size="2">{data.numberOfAdults} </Text>
@@ -124,13 +123,23 @@ export function ReviewBooking({
             {formatToDollar.format(data.totalPrice)}
           </Text>
         </StyledLineInfo>
-      </Flex>
-      <Flex gap="3" mt="4" justify="end">
-        {cancelButton}
-        <DialogClose>
-          <Button type="submit">Continue</Button>
-        </DialogClose>
+        <StyledButtonsGrid>
+          {cancelButton}
+          <DialogClose>
+            <Button fullWidth variant="primary" type="submit">
+              Book Now
+            </Button>
+          </DialogClose>
+        </StyledButtonsGrid>
       </Flex>
     </form>
   );
 }
+const StyledButtonsGrid = styled("div")({
+  display: "grid",
+  gridTemplateColumns: "repeat(2, 1fr)",
+  gap: "1rem",
+  "@media (max-width: 590px)": {
+    gridTemplateColumns: "1fr",
+  },
+});
