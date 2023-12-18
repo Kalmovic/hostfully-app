@@ -12,6 +12,8 @@ import {
 } from "@radix-ui/themes";
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import styled from "styled-components";
+import { useBookingStore } from "../providers/bookingsProvider";
+import { useHotelStore } from "../providers/hotelsProvider";
 
 type TableProps = {
   actions: ["edit", "delete"];
@@ -41,6 +43,11 @@ const StyledRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export function Table(props: TableProps) {
+  const deleteBooking = useBookingStore((state) => state.deleteBooking);
+  const updateHotelAvailableDates = useHotelStore(
+    (state) => state.updateHotelAvailableDates
+  );
+
   return (
     <StyledTable variant="ghost">
       <StyledTableHeader>
@@ -51,35 +58,58 @@ export function Table(props: TableProps) {
         </TableRow>
       </StyledTableHeader>
       <TableBody>
-        {props.rows.map((row, i) => (
-          <StyledRow key={row[i]}>
-            {row.map((cell) => (
-              <TableCell key={cell}>{cell}</TableCell>
-            ))}
-            <TableCell>
-              <Badge color="green">Active</Badge>
-            </TableCell>
-            <TableCell>
-              <Flex direction="row" gap="3">
-                {props.actions.map((action) =>
-                  action === "edit" ? (
-                    <Tooltip content="Edit booking">
-                      <IconButton variant="soft" color="indigo">
-                        <Pencil1Icon />
-                      </IconButton>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip content="Cancel booking">
-                      <IconButton variant="soft" color="crimson">
-                        <TrashIcon />
-                      </IconButton>
-                    </Tooltip>
-                  )
-                )}
-              </Flex>
-            </TableCell>
-          </StyledRow>
-        ))}
+        {props.rows.map((row, i) => {
+          const dates = row[2].split(" - ");
+          return (
+            <StyledRow key={row[i]}>
+              {row.map((cell) =>
+                cell === "Active" || cell === "Cancelled" ? (
+                  <TableCell>
+                    <Badge color={cell === "Active" ? "green" : "red"}>
+                      {cell}
+                    </Badge>
+                  </TableCell>
+                ) : (
+                  <TableCell key={cell}>{cell}</TableCell>
+                )
+              )}
+              <TableCell
+              // style={{ // TODO: improve this
+              //   minWidth: 95,
+              // }}
+              >
+                <Flex direction="row" gap="3">
+                  {props.actions.map((action) =>
+                    row[4] === "Cancelled" ? null : action === "edit" ? (
+                      <Tooltip content="Edit booking">
+                        <IconButton variant="soft" color="indigo">
+                          <Pencil1Icon />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip content="Cancel booking">
+                        <IconButton
+                          variant="soft"
+                          color="crimson"
+                          onClick={() => {
+                            deleteBooking(row[0]); // TODO: fix this
+                            updateHotelAvailableDates({
+                              id: row[1], // name
+                              bookedRangeDates: dates,
+                              action: "add",
+                            });
+                          }}
+                        >
+                          <TrashIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )
+                  )}
+                </Flex>
+              </TableCell>
+            </StyledRow>
+          );
+        })}
       </TableBody>
     </StyledTable>
   );
