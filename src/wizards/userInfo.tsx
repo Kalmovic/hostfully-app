@@ -114,8 +114,6 @@ export function UserInfo(props: UserInfoProps) {
 const StyledButtonsGrid = styled("div")({
   display: "grid",
   gridTemplateColumns: "repeat(2, 1fr)",
-  gap: "1rem",
-  "@media (max-width: 590px)": {
-    gridTemplateColumns: "1fr",
-  },
+  width: "100%",
+  gap: "0.5rem",
 });

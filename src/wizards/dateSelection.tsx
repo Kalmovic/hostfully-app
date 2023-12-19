@@ -176,11 +176,9 @@ export function DateSelection(props: PropsType) {
 
 const StyledButtonsGrid = styled("div")({
   display: "grid",
+  width: "100%",
   gridTemplateColumns: "repeat(2, 1fr)",
-  gap: "1rem",
-  "@media (max-width: 590px)": {
-    gridTemplateColumns: "1fr",
-  },
+  gap: "0.5rem",
 });
 
 const StyledFooterWrapper = styled(Flex)({
