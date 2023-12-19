@@ -17,24 +17,16 @@ type TabsProps = {
   tabs: Tabs[];
 };
 
-const StyledTabsRoot = styled(TabsRoot)(({ theme }) => ({
-  width: "100%",
-  height: "100%",
-}));
-
-const StyledTabContent = styled(TabsContent)(({ theme }) => ({
-  padding: 16,
-  backgroundColor: theme.colors.surface,
-  height: "100%",
-  width: "100%",
-}));
-
 export function Tabs(props: TabsProps) {
   return (
     <StyledTabsRoot defaultValue="account">
       <TabsList>
         {props.tabs.map((tab) => (
-          <TabsTrigger key={tab.value} value={tab.value}>
+          <TabsTrigger
+            key={tab.value}
+            value={tab.value}
+            autoFocus={tab.name === "Explore"}
+          >
             <Flex direction="row" gap="4">
               {tab.name}
             </Flex>
@@ -50,3 +42,15 @@ export function Tabs(props: TabsProps) {
     </StyledTabsRoot>
   );
 }
+
+const StyledTabContent = styled(TabsContent)(({ theme }) => ({
+  padding: 16,
+  backgroundColor: theme.colors.surface,
+  height: "100%",
+  width: "100%",
+}));
+
+const StyledTabsRoot = styled(TabsRoot)({
+  width: "100%",
+  height: "100%",
+});
