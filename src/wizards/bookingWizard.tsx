@@ -63,15 +63,13 @@ type ReviewBookingData = {
 
 type WizardState = DateSelectionData | UserInfoData | ReviewBookingData;
 
-const Wrapper = ({ children }) => {
+const Wrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
-        // width: "300px",
         margin: "auto",
-        // border: "1px solid black",
         borderRadius: "5px",
         padding: "0.5rem",
       }}
@@ -140,18 +138,34 @@ export function BookingWizard({
         action: "makeRangeAvailable",
       });
     }
-  }, [props.mode, hotel.title]);
+  }, [
+    props.mode,
+    hotel.title,
+    props.defaultBookingInfo?.startDate,
+    props.defaultBookingInfo?.endDate,
+    updateHotelAvailableDates,
+  ]);
 
   useEffect(() => {
-    return () => {
-      // TODO: this should only be called when the user cancels the wizard
-      // if the user completes the wizard, the hotel should be updated
-      props.mode === "edit" ? onUpdateCancel() : null;
+    const handleKeyPress = (event: KeyboardEvent) => {
+      const focusedElement = document.activeElement;
+      if (
+        props.mode === "edit" &&
+        event.key === "Escape" &&
+        focusedElement?.role === "dialog"
+      ) {
+        onUpdateCancel();
+      }
     };
+    window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.mode, wizardState.data]);
 
   const onUpdateCancel = () => {
-    if (props.mode === "create") return;
+    if (props.mode === "create") return; // required for type safety
     updateHotelAvailableDates({
       id: hotel.title,
       bookedRangeDates: [
@@ -162,22 +176,18 @@ export function BookingWizard({
     });
   };
 
-  const changeWizardState = (kind, data) => {
+  const onDateSelectionSubmit = (data: UserInfoData["data"]) => {
     setWizardState({
-      kind,
-      data: {
-        ...wizardState.data,
-        ...data,
-      },
+      kind: BookingSteps.USER_INFO,
+      data,
     });
   };
 
-  const onDateSelectionSubmit = (dateInfo: DateSelectionData["data"]) => {
-    changeWizardState(BookingSteps.USER_INFO, dateInfo);
-  };
-
-  const onUserInfoFormSubmit = (userInfo: UserInfoData["data"]) => {
-    changeWizardState(BookingSteps.REVIEW_BOOKING, userInfo);
+  const onUserInfoFormSubmit = (data: ReviewBookingData["data"]) => {
+    setWizardState({
+      kind: BookingSteps.REVIEW_BOOKING,
+      data,
+    });
   };
 
   const onReviewBookingSubmit = (bookingInfo: ReviewBookingData["data"]) => {
@@ -221,11 +231,7 @@ export function BookingWizard({
               mode={props.mode}
               data={props.defaultBookingInfo}
               cancelButton={
-                <DialogClose
-                  onClick={() =>
-                    props.mode === "edit" ? onUpdateCancel() : null
-                  }
-                >
+                <DialogClose onClick={() => onUpdateCancel()}>
                   <Button variant="secondary">Cancel</Button>
                 </DialogClose>
               }
@@ -242,7 +248,12 @@ export function BookingWizard({
                   <Button variant="secondary">Cancel</Button>
                 </DialogClose>
               }
-              onSubmit={onDateSelectionSubmit}
+              onSubmit={(data) =>
+                onDateSelectionSubmit({
+                  ...wizardState.data,
+                  ...data,
+                })
+              }
               unavailableDates={hotel.unavailableDates}
               defaultPrice={hotelDefaultPrice}
             />
@@ -259,7 +270,12 @@ export function BookingWizard({
                 <Button variant="secondary">Cancel</Button>
               </DialogClose>
             }
-            onSubmit={onUserInfoFormSubmit}
+            onSubmit={(data) =>
+              onUserInfoFormSubmit({
+                ...wizardState.data,
+                ...data,
+              })
+            }
           />
         </Wrapper>
       );
