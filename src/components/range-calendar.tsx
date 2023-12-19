@@ -26,6 +26,7 @@ import styled from "styled-components";
 
 type BookCalenderProps = {
   onChange: (date: { start: string; end: string; totalPrice: number }) => void;
+  onChangeDatesInProgress: (date: string) => void;
   numberOfAdults?: number;
   numberOfChildren?: number;
   numberOfRooms?: number;
@@ -39,6 +40,7 @@ export function BookCalendar({
   numberOfChildren = 0,
   numberOfRooms = 1,
   onChange,
+  onChangeDatesInProgress,
   unavailableDates,
   defaultPrice,
   defaultValue,
@@ -90,10 +92,12 @@ export function BookCalendar({
   });
 
   const isDateUnavailable = (date: DateValue) =>
-    disabledRanges?.some(
-      (interval) =>
-        date.compare(interval[0]) >= 0 && date.compare(interval[1]) <= 0
-    );
+    disabledRanges
+      ? disabledRanges.some(
+          (interval) =>
+            date.compare(interval[0]) >= 0 && date.compare(interval[1]) <= 0
+        )
+      : false;
 
   const isWeekend = (date: CalendarDate) => {
     return date.toDate(getLocalTimeZone()).getDay() === 0 ||
@@ -125,6 +129,7 @@ export function BookCalendar({
     return isWeekend(date) ? basePrice * 2 : basePrice;
   };
 
+  // @ts-expect-error cant import RangeValue from react-aria-components
   const onChangeDates = (date: RangeValue<DateValue>) => {
     // array of dates between start and end
     const start = format(date.start.toDate(getLocalTimeZone()), "yyyy-MM-dd");
@@ -185,11 +190,16 @@ export function BookCalendar({
     return {
       start,
       end,
-    };
+      // @ts-expect-error cant import RangeValue from react-aria-components
+    } as RangeValue<DateValue>;
   };
   return (
     <I18nProvider locale="en">
       <RangeCalendar
+        onFocusChange={(date) => {
+          const start = format(date.toDate(getLocalTimeZone()), "yyyy-MM-dd");
+          onChangeDatesInProgress(start);
+        }}
         aria-label="Trip dates"
         visibleDuration={{ months: isMobile ? 1 : 2 }}
         pageBehavior="visible"

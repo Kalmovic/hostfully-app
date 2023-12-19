@@ -145,6 +145,14 @@ export function DateSelection(props: PropsType) {
             end: props.data.endDate || "",
             totalPrice: props.data.totalPrice || 0,
           }}
+          onChangeDatesInProgress={(startDate) => {
+            setValue("startDate", startDate, {
+              shouldValidate: true,
+            });
+            setValue("endDate", "", {
+              shouldValidate: true,
+            });
+          }}
           onChange={(dates) => {
             setValue("startDate", dates.start, { shouldValidate: true });
             setValue("endDate", dates.end, { shouldValidate: true });
