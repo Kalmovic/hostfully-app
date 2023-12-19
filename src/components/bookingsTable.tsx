@@ -38,81 +38,6 @@ type TableProps = {
   )[][];
 };
 
-const StyledTable = styled(TableRoot)(({ theme }) => ({
-  border: "1px solid #ccc",
-  borderRadius: 8,
-  overflow: "hidden",
-  marginBottom: 16,
-  width: "100%",
-  backgroundColor: theme.colors.white,
-}));
-
-const StyledColumnHeaderCell = styled(TableColumnHeaderCell)({
-  fontWeight: 500,
-  padding: "0.785rem 0.785rem",
-  "@media (max-width: 768px)": {
-    padding: "0.785rem 0.4rem",
-  },
-});
-
-const StyledRow = styled(TableRow)({
-  border: "none",
-});
-
-const StyledPeriodText = styled(Flex)(({ theme }) => ({
-  backgroundColor: theme.colors.surface,
-  border: "1px solid black",
-  borderRadius: "0.5rem",
-  padding: "0.25rem 0.5rem",
-  width: "fit-content",
-  alignItems: "center",
-  "@media (max-width: 768px)": {
-    border: "none",
-    gap: "1px",
-    padding: "0.25rem 0.25rem",
-    flexDirection: "column",
-  },
-}));
-
-const StyledBookingDetails = styled(Flex)(({ theme }) => ({
-  backgroundColor: theme.colors.surface,
-  border: "1px solid black",
-  borderRadius: "0.5rem",
-  padding: "0.25rem 0.5rem",
-  width: "fit-content",
-  alignItems: "center",
-  "@media (max-width: 768px)": {
-    border: "none",
-    gap: "1px",
-    padding: "0.25rem 0.25rem",
-    flexDirection: "column",
-    "[role='separator']": {
-      display: "none",
-    },
-  },
-}));
-
-const StyledActionsWrapper = styled(Flex)({
-  flexDirection: "row",
-  "@media (max-width: 768px)": {
-    flexDirection: "column",
-  },
-});
-
-const StyledTableCell = styled(TableCell)({
-  padding: "0.785rem 0.785rem",
-  "@media (max-width: 768px)": {
-    padding: "0.785rem 0.4rem",
-  },
-});
-
-const StyledButtonsGrid = styled("div")({
-  marginTop: "2rem",
-  display: "grid",
-  gridTemplateColumns: "repeat(2, 1fr)",
-  gap: "1rem",
-});
-
 const CancelBookingDialog = ({
   bookingId,
   hotelTitle,
@@ -207,7 +132,7 @@ export function BookingsTable(props: TableProps) {
             <StyledRow key={row[i].rowKey}>
               {row.map((cell) => {
                 return cell.rowKey === "status" ? (
-                  <StyledTableCell style={{}}>
+                  <StyledTableCell key={cell.rowKey}>
                     <Flex
                       gap="2"
                       align="center"
@@ -324,3 +249,78 @@ export function BookingsTable(props: TableProps) {
     </StyledTable>
   );
 }
+
+const StyledTable = styled(TableRoot)(({ theme }) => ({
+  border: "1px solid #ccc",
+  borderRadius: 8,
+  overflow: "hidden",
+  marginBottom: 16,
+  width: "100%",
+  backgroundColor: theme.colors.white,
+}));
+
+const StyledColumnHeaderCell = styled(TableColumnHeaderCell)({
+  fontWeight: 500,
+  padding: "0.785rem 0.785rem",
+  "@media (max-width: 768px)": {
+    padding: "0.785rem 0.4rem",
+  },
+});
+
+const StyledRow = styled(TableRow)({
+  border: "none",
+});
+
+const StyledPeriodText = styled(Flex)(({ theme }) => ({
+  backgroundColor: theme.colors.surface,
+  border: "1px solid black",
+  borderRadius: "0.5rem",
+  padding: "0.25rem 0.5rem",
+  width: "fit-content",
+  alignItems: "center",
+  "@media (max-width: 768px)": {
+    border: "none",
+    gap: "1px",
+    padding: "0.25rem 0.25rem",
+    flexDirection: "column",
+  },
+}));
+
+const StyledBookingDetails = styled(Flex)(({ theme }) => ({
+  backgroundColor: theme.colors.surface,
+  border: "1px solid black",
+  borderRadius: "0.5rem",
+  padding: "0.25rem 0.5rem",
+  width: "fit-content",
+  alignItems: "center",
+  "@media (max-width: 768px)": {
+    border: "none",
+    gap: "1px",
+    padding: "0.25rem 0.25rem",
+    flexDirection: "column",
+    "[role='separator']": {
+      display: "none",
+    },
+  },
+}));
+
+const StyledActionsWrapper = styled(Flex)({
+  flexDirection: "row",
+  "@media (max-width: 768px)": {
+    flexDirection: "column",
+  },
+});
+
+const StyledTableCell = styled(TableCell)({
+  padding: "0.785rem 0.785rem",
+  "@media (max-width: 768px)": {
+    padding: "0.785rem 0.4rem",
+  },
+});
+
+const StyledButtonsGrid = styled("div")({
+  marginTop: "2rem",
+  display: "grid",
+  gridTemplateColumns: "repeat(2, 1fr)",
+  gap: "1rem",
+});
