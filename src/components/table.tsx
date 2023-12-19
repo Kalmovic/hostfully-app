@@ -11,6 +11,9 @@ import {
   Tooltip,
   Separator,
   Text,
+  DialogTitle,
+  DialogClose,
+  DialogDescription,
 } from "@radix-ui/themes";
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import styled from "styled-components";
@@ -21,6 +24,8 @@ import { Dialog } from "./dialog";
 import { theme } from "../providers/theme";
 import { Baby, BedDouble, Users } from "lucide-react";
 import { format, parseISO } from "date-fns";
+import { Button } from "./button";
+import { toast } from "react-toastify";
 
 type TableProps = {
   actions: ["edit", "cancel"];
@@ -87,26 +92,88 @@ const StyledBookingDetails = styled(Flex)(({ theme }) => ({
   },
 }));
 
-const StyledActionsWrapper = styled(Flex)(({ theme }) => ({
+const StyledActionsWrapper = styled(Flex)({
   flexDirection: "row",
   "@media (max-width: 768px)": {
     flexDirection: "column",
   },
-}));
+});
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)({
   padding: "0.785rem 0.785rem",
   "@media (max-width: 768px)": {
     padding: "0.785rem 0.4rem",
   },
-}));
+});
 
-export function Table(props: TableProps) {
+const StyledButtonsGrid = styled("div")({
+  marginTop: "2rem",
+  display: "grid",
+  gridTemplateColumns: "repeat(2, 1fr)",
+  gap: "1rem",
+});
+
+const CancelBookingDialog = ({
+  bookingId,
+  hotelTitle,
+  startDate,
+  endDate,
+}: {
+  bookingId: number;
+  hotelTitle: string;
+  startDate: string;
+  endDate: string;
+}) => {
   const deleteBooking = useBookingStore((state) => state.deleteBooking);
   const updateHotelAvailableDates = useHotelStore(
     (state) => state.updateHotelAvailableDates
   );
 
+  return (
+    <Dialog
+      trigger={
+        <IconButton variant="soft" color="crimson">
+          <Tooltip content="Cancel booking">
+            <TrashIcon />
+          </Tooltip>
+        </IconButton>
+      }
+      children={
+        <>
+          <DialogTitle>Cancelling booking for {hotelTitle}</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to cancel this booking? This will make the
+            booked dates available again and you'll receive the refund next
+            week.
+          </DialogDescription>
+          <StyledButtonsGrid>
+            <DialogClose>
+              <Button variant="secondary">No</Button>
+            </DialogClose>
+            <DialogClose>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  deleteBooking(bookingId);
+                  updateHotelAvailableDates({
+                    id: hotelTitle, // name
+                    bookedRangeDates: [startDate, endDate],
+                    action: "makeRangeAvailable",
+                  });
+                  toast.success("Booking cancelled successfully!");
+                }}
+              >
+                Yes, cancel booking
+              </Button>
+            </DialogClose>
+          </StyledButtonsGrid>
+        </>
+      }
+    />
+  );
+};
+
+export function Table(props: TableProps) {
   return (
     <StyledTable variant="ghost">
       <TableHeader>
@@ -240,22 +307,12 @@ export function Table(props: TableProps) {
                         }
                       />
                     ) : (
-                      <Tooltip content="Cancel booking">
-                        <IconButton
-                          variant="soft"
-                          color="crimson"
-                          onClick={() => {
-                            deleteBooking(bookingId); // TODO: fix this
-                            updateHotelAvailableDates({
-                              id: hotelTitle, // name
-                              bookedRangeDates: [startDate, endDate],
-                              action: "makeRangeAvailable",
-                            });
-                          }}
-                        >
-                          <TrashIcon />
-                        </IconButton>
-                      </Tooltip>
+                      <CancelBookingDialog
+                        bookingId={bookingId}
+                        hotelTitle={hotelTitle}
+                        startDate={startDate}
+                        endDate={endDate}
+                      />
                     )
                   )}
                 </StyledActionsWrapper>

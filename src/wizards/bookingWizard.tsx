@@ -7,6 +7,8 @@ import { useBookingStore } from "../providers/bookingsProvider";
 import { formatToDollar } from "../utils/formatCurrency";
 import { DialogClose } from "@radix-ui/themes";
 import { Button } from "../components/button";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 enum BookingSteps {
   DATE_SELECTION = "DATE_SELECTION",
@@ -142,9 +144,11 @@ export function BookingWizard({
 
   useEffect(() => {
     return () => {
+      // TODO: this should only be called when the user cancels the wizard
+      // if the user completes the wizard, the hotel should be updated
       props.mode === "edit" ? onUpdateCancel() : null;
     };
-  }, [props.mode]);
+  }, [props.mode, wizardState.data]);
 
   const onUpdateCancel = () => {
     if (props.mode === "create") return;
@@ -192,6 +196,7 @@ export function BookingWizard({
         title: hotel.title,
         status: "Active",
       });
+      toast.success("Booking updated successfully!");
     } else {
       addBooking({
         description: hotel.description,
@@ -203,6 +208,7 @@ export function BookingWizard({
         ...bookingInfo,
         status: "Active",
       });
+      toast.success("Booking created successfully!");
     }
   };
 
