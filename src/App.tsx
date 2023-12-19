@@ -1,6 +1,6 @@
 import { Tabs } from "./components/tabs";
 import { Text } from "@radix-ui/themes";
-import { ManageListings } from "./sections/manageListings";
+import { ManageBookings } from "./sections/manageBookings";
 import styled from "styled-components";
 import { Explore } from "./sections/explore";
 
@@ -32,7 +32,7 @@ function App() {
             value: "explore",
           },
           {
-            children: <ManageListings />,
+            children: <ManageBookings />,
             name: "Bookings",
             value: "bookings",
           },

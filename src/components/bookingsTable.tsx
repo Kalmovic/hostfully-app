@@ -173,7 +173,7 @@ const CancelBookingDialog = ({
   );
 };
 
-export function Table(props: TableProps) {
+export function BookingsTable(props: TableProps) {
   return (
     <StyledTable variant="ghost">
       <TableHeader>

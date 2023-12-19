@@ -1,4 +1,4 @@
-import { Table } from "../components/table";
+import { BookingsTable } from "../components/bookingsTable";
 import styled from "styled-components";
 import { Flex, Text } from "@radix-ui/themes";
 import { useBookingStore } from "../providers/bookingsProvider";
@@ -47,7 +47,7 @@ const EmptyBookings = () => (
   </Flex>
 );
 
-export function ManageListings() {
+export function ManageBookings() {
   const bookings = useBookingStore((state) => state.bookings);
 
   const rows = bookings.map((booking) => [
@@ -115,7 +115,7 @@ export function ManageListings() {
             Manage your bookings
           </Text>
           <Flex gap="4">
-            <Table
+            <BookingsTable
               actions={["edit", "cancel"]}
               headers={[
                 "id",
