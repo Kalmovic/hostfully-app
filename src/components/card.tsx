@@ -18,12 +18,13 @@ export function Card(props: CardProps) {
       <Inset clip="padding-box" side="top" pb="current">
         <img
           src={img}
-          alt="Bold typography"
+          loading="lazy"
+          alt="Hotel image"
+          height={140}
           style={{
             display: "block",
             objectFit: "cover",
             width: "100%",
-            height: 140,
           }}
         />
       </Inset>
@@ -33,32 +34,42 @@ export function Card(props: CardProps) {
       <Text color="jade" as="p" size="1" style={{ marginBottom: 8 }}>
         Starting at {formatToDollar.format(hotelPrice)}
       </Text>
-      <Flex
+      <Text
+        as="p"
+        size="1"
         style={{
-          flexDirection: "column",
-          alignItems: "flex-end",
-          justifyContent: "flex-end",
+          marginTop: 16,
+          marginBottom: 8,
+          height: 130,
+          overflowY: "auto",
         }}
       >
-        <Text
-          as="p"
-          size="1"
+        {hotelDescription}
+      </Text>
+      <Flex
+        direction="column"
+        justify="between"
+        style={{
+          marginTop: "auto",
+        }}
+      >
+        <Flex
           style={{
-            marginTop: 16,
-            marginBottom: 8,
-            height: 100,
-            overflow: "scroll",
+            flexDirection: "column",
+            alignItems: "flex-end",
+            justifyContent: "flex-end",
           }}
         >
-          {hotelDescription}
-        </Text>
-        {actionButtons}
+          {actionButtons}
+        </Flex>
       </Flex>
     </CardWrapper>
   );
 }
 
 const CardWrapper = styled(RadixCard)({
+  display: "flex",
+  flexDirection: "column",
   border: "1px solid #ccc",
   borderRadius: 4,
   overflow: "hidden",
@@ -66,11 +77,16 @@ const CardWrapper = styled(RadixCard)({
   boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.2)",
   width: "100%",
   maxWidth: 240,
-  maxHeight: 400,
+  maxHeight: 600,
   img: {
     width: 200,
     height: 150,
     objectFit: "fill",
+  },
+  ".rt-CardInner": {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
   },
   "@media (max-width: 768px)": {
     maxWidth: "unset",
