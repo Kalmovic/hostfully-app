@@ -132,6 +132,10 @@ export function ManageBookings() {
           numberOfChildren={booking.numberOfChildren}
           numberOfRooms={booking.numberOfRooms}
           status={booking.status}
+          firstName={booking.firstName}
+          lastName={booking.lastName}
+          email={booking.email}
+          creditCardNumber={booking.creditCardNumber}
         />
       ),
     },
@@ -162,6 +166,7 @@ export function ManageBookings() {
               }}
               variant="soft"
               color="indigo"
+              aria-label="change-view-mode"
               onClick={() =>
                 renderMode === "table"
                   ? setRenderMode("cards")
@@ -214,6 +219,10 @@ export function ManageBookings() {
                         numberOfChildren={booking.numberOfChildren}
                         numberOfRooms={booking.numberOfRooms}
                         status={booking.status}
+                        firstName={booking.firstName}
+                        lastName={booking.lastName}
+                        email={booking.email}
+                        creditCardNumber={booking.creditCardNumber}
                       />,
                     ]}
                   />

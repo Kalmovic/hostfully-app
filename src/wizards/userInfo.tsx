@@ -54,7 +54,6 @@ export function UserInfo(props: UserInfoProps) {
         <Controller
           control={control}
           name="firstName"
-          defaultValue="John"
           render={({ field }) => (
             <TextField.Input
               {...field}
@@ -66,7 +65,6 @@ export function UserInfo(props: UserInfoProps) {
         <Controller
           control={control}
           name="lastName"
-          defaultValue="Doe"
           render={({ field }) => (
             <TextField.Input {...field} placeholder="Enter your full name" />
           )}
@@ -77,7 +75,6 @@ export function UserInfo(props: UserInfoProps) {
           render={({ field }) => (
             <TextField.Input
               {...field}
-              defaultValue=""
               type="email"
               placeholder="Enter your email"
             />
@@ -89,7 +86,6 @@ export function UserInfo(props: UserInfoProps) {
           render={({ field }) => (
             <TextField.Input
               {...field}
-              defaultValue=""
               type=""
               placeholder="Enter your credit card number"
             />

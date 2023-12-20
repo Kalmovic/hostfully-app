@@ -105,6 +105,10 @@ type BookingWizardProps =
         numberOfAdults: number;
         numberOfChildren: number;
         numberOfRooms: number;
+        firstName: string;
+        lastName: string;
+        email: string;
+        creditCardNumber: string;
       };
     };
 
@@ -232,7 +236,9 @@ export function BookingWizard({
               data={props.defaultBookingInfo}
               cancelButton={
                 <DialogClose onClick={() => onUpdateCancel()}>
-                  <Button variant="secondary">Cancel</Button>
+                  <Button variant="secondary" aria-label="cancel-button">
+                    Cancel
+                  </Button>
                 </DialogClose>
               }
               onSubmit={onDateSelectionSubmit}
@@ -245,7 +251,9 @@ export function BookingWizard({
               data={wizardState.data}
               cancelButton={
                 <DialogClose>
-                  <Button variant="secondary">Cancel</Button>
+                  <Button variant="secondary" aria-label="cancel-button">
+                    Cancel
+                  </Button>
                 </DialogClose>
               }
               onSubmit={(data) =>
@@ -267,7 +275,9 @@ export function BookingWizard({
             data={wizardState.data}
             cancelButton={
               <DialogClose>
-                <Button variant="secondary">Cancel</Button>
+                <Button variant="secondary" aria-label="cancel-button">
+                  Cancel
+                </Button>
               </DialogClose>
             }
             onSubmit={(data) =>
@@ -290,7 +300,9 @@ export function BookingWizard({
                   props.mode === "edit" ? onUpdateCancel() : null
                 }
               >
-                <Button variant="secondary">Cancel</Button>
+                <Button variant="secondary" aria-label="cancel-button">
+                  Cancel
+                </Button>
               </DialogClose>
             }
             onSubmit={() => onReviewBookingSubmit(wizardState.data)}

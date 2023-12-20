@@ -92,6 +92,10 @@ export const EditBookigDialog = ({
   numberOfAdults,
   numberOfChildren,
   numberOfRooms,
+  firstName,
+  lastName,
+  email,
+  creditCardNumber,
 }: {
   mode?: "table" | "cards";
   bookingId: number;
@@ -102,6 +106,10 @@ export const EditBookigDialog = ({
   numberOfAdults: number;
   numberOfChildren: number;
   numberOfRooms: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  creditCardNumber: string;
 }) => (
   <Dialog
     children={
@@ -117,6 +125,10 @@ export const EditBookigDialog = ({
           numberOfAdults,
           numberOfChildren,
           numberOfRooms,
+          firstName,
+          lastName,
+          email,
+          creditCardNumber,
         }}
       />
     }
@@ -146,6 +158,10 @@ export const ActionsButtons = ({
   numberOfChildren,
   numberOfRooms,
   status,
+  firstName,
+  lastName,
+  email,
+  creditCardNumber,
 }: {
   mode?: "table" | "cards";
   actions: ["edit", "cancel"];
@@ -158,6 +174,10 @@ export const ActionsButtons = ({
   numberOfChildren: number;
   numberOfRooms: number;
   status: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  creditCardNumber: string;
 }) =>
   mode === "table" ? (
     <StyledActionsWrapper gap="3">
@@ -173,6 +193,10 @@ export const ActionsButtons = ({
             numberOfAdults={numberOfAdults}
             numberOfChildren={numberOfChildren}
             numberOfRooms={numberOfRooms}
+            firstName={firstName}
+            lastName={lastName}
+            email={email}
+            creditCardNumber={creditCardNumber}
           />
         ) : (
           <CancelBookingDialog
@@ -186,7 +210,7 @@ export const ActionsButtons = ({
       )}
     </StyledActionsWrapper>
   ) : (
-    <StyledButtonsGrid>
+    <StyledButtonsGrid aria-label="card-actions-buttons">
       {actions.map((action) =>
         status === "Cancelled" ? null : action === "edit" ? (
           <EditBookigDialog
@@ -199,6 +223,10 @@ export const ActionsButtons = ({
             numberOfAdults={numberOfAdults}
             numberOfChildren={numberOfChildren}
             numberOfRooms={numberOfRooms}
+            firstName={firstName}
+            lastName={lastName}
+            email={email}
+            creditCardNumber={creditCardNumber}
           />
         ) : (
           <CancelBookingDialog
