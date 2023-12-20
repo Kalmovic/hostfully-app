@@ -56,7 +56,7 @@ export function ReviewBooking({
       </DialogDescription>
       <Flex direction="column" gap="5">
         <Flex direction="column" gap="2">
-          <StyledLineInfo>
+          <StyledLineInfo aria-label="Booking period">
             <Text size="2">Booking period: </Text>
             <Text
               size="2"
@@ -71,7 +71,7 @@ export function ReviewBooking({
               {format(parseISO(data.endDate), "MM/dd/yyyy")}
             </Text>
           </StyledLineInfo>
-          <StyledLineInfo>
+          <StyledLineInfo aria-label="Room details">
             <Text size="2">Room details: </Text>
             <Flex
               gap="2"
@@ -109,7 +109,7 @@ export function ReviewBooking({
               </Flex>
             </Flex>
           </StyledLineInfo>
-          <StyledLineInfo>
+          <StyledLineInfo aria-label="Total price">
             <Text size="2">Total price: </Text>
             <Text
               size="2"

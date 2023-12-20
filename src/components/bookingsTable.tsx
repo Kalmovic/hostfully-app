@@ -41,7 +41,10 @@ export function BookingsTable(props: TableProps) {
             <StyledRow key={row[i].rowKey}>
               {row.map((cell) => {
                 return cell.rowKey === "status" ? (
-                  <StyledTableCell key={cell.rowKey}>
+                  <StyledTableCell
+                    key={cell.rowKey}
+                    aria-label={`row-${cell.rowKey}`}
+                  >
                     <Flex
                       gap="2"
                       align="center"
@@ -57,11 +60,13 @@ export function BookingsTable(props: TableProps) {
                     </Flex>
                   </StyledTableCell>
                 ) : cell.rowKey === "bookingDetails" ? (
-                  <StyledTableCell>
+                  <StyledTableCell aria-label={`row-${cell.rowKey}`}>
                     <StyledBookingDetails gap="2">
                       <Flex gap="1" align="center">
                         <Users size="15px" color={theme.colors.black} />
-                        <Text size="2">{cell.content["adults"]}</Text>
+                        <Text size="2" aria-label="adults-number">
+                          {cell.content["adults"]}
+                        </Text>
                       </Flex>
                       <Separator
                         orientation="vertical"
@@ -71,7 +76,9 @@ export function BookingsTable(props: TableProps) {
                       />
                       <Flex gap="1" align="center">
                         <BedDouble size="15px" color={theme.colors.black} />
-                        <Text size="2">{cell.content["rooms"]} </Text>
+                        <Text size="2" aria-label="rooms-number">
+                          {cell.content["rooms"]}{" "}
+                        </Text>
                       </Flex>
                       <Separator
                         orientation="vertical"
@@ -81,12 +88,17 @@ export function BookingsTable(props: TableProps) {
                       />
                       <Flex gap="1" align="center">
                         <Baby size="15px" color={theme.colors.black} />
-                        <Text size="2">{cell.content["children"]}</Text>
+                        <Text size="2" aria-label="children-number">
+                          {cell.content["children"]}
+                        </Text>
                       </Flex>
                     </StyledBookingDetails>
                   </StyledTableCell>
                 ) : cell.rowKey === "period" ? (
-                  <StyledTableCell key={cell.rowKey}>
+                  <StyledTableCell
+                    key={cell.rowKey}
+                    aria-label={`row-${cell.rowKey}`}
+                  >
                     <StyledPeriodText gap="2">
                       <Text size="2">
                         {format(
@@ -101,9 +113,11 @@ export function BookingsTable(props: TableProps) {
                     </StyledPeriodText>
                   </StyledTableCell>
                 ) : cell.rowKey === "actions" ? (
-                  <StyledTableCell>{cell.content}</StyledTableCell>
+                  <StyledTableCell aria-label={`row-${cell.rowKey}`}>
+                    {cell.content}
+                  </StyledTableCell>
                 ) : (
-                  <StyledTableCell>
+                  <StyledTableCell aria-label={`row-${cell.rowKey}`}>
                     <Flex
                       gap="2"
                       align="center"

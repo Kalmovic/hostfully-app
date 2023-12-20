@@ -53,7 +53,7 @@ export function Card(props: CardProps) {
       </Inset>
       {props.mode === "explore" ? (
         <>
-          <Text as="p" size="4" weight="bold">
+          <Text as="p" size="4" weight="bold" aria-label="hotel-name">
             {props.hotelName}
           </Text>
           <Text color="jade" as="p" size="1" style={{ marginBottom: 8 }}>

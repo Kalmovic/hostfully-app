@@ -25,6 +25,7 @@ export function ManualInput({
           variant="soft"
           color="indigo"
           type="button"
+          aria-label={`decrement-${label}`}
           onClick={() => {
             setValue(String(Number(value) - 1));
             onChange(Number(value) - 1);
@@ -32,12 +33,13 @@ export function ManualInput({
         >
           <MinusIcon />
         </IconButton>
-        <Text>{value}</Text>
+        <Text aria-label={`value-${label}`}>{value}</Text>
         <IconButton
           disabled={Number(value) === 10}
           variant="soft"
           color="indigo"
           type="button"
+          aria-label={`increment-${label}`}
           onClick={() => {
             setValue(String(Number(value) + 1));
             onChange(Number(value) + 1);

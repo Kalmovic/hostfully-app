@@ -22,7 +22,7 @@ export function Tabs(props: TabsProps) {
     <StyledTabsRoot defaultValue="explore">
       <StyledTabsList>
         {props.tabs.map((tab) => (
-          <TabsTrigger key={tab.value} value={tab.value}>
+          <TabsTrigger key={tab.value} value={tab.value} aria-label={tab.value}>
             <Flex direction="row" gap="4">
               {tab.name}
             </Flex>

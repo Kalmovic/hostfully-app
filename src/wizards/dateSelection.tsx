@@ -157,7 +157,9 @@ export function DateSelection(props: PropsType) {
         />
         <Text align="right">
           Total price:{" "}
-          <strong>{formatToDollar.format(watch("totalPrice") || 0)}</strong>
+          <strong aria-label="total-price">
+            {formatToDollar.format(watch("totalPrice") || 0)}
+          </strong>
         </Text>
         <StyledFooterWrapper>
           <StyledButtonsGrid>
