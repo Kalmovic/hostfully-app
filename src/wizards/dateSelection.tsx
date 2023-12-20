@@ -83,6 +83,8 @@ export function DateSelection(props: PropsType) {
   const numberOfChildren = watch("numberOfChildren");
   const numberOfRooms = watch("numberOfRooms");
 
+  console.log("formState", formState);
+
   return (
     <form onSubmit={handleSubmit(props.onSubmit)}>
       <DialogTitle>Details and Availability</DialogTitle>
@@ -145,14 +147,6 @@ export function DateSelection(props: PropsType) {
             end: props.data.endDate || "",
             totalPrice: props.data.totalPrice || 0,
           }}
-          onChangeDatesInProgress={(startDate) => {
-            setValue("startDate", startDate, {
-              shouldValidate: true,
-            });
-            setValue("endDate", "", {
-              shouldValidate: true,
-            });
-          }}
           onChange={(dates) => {
             setValue("startDate", dates.start, { shouldValidate: true });
             setValue("endDate", dates.end, { shouldValidate: true });
@@ -161,10 +155,11 @@ export function DateSelection(props: PropsType) {
             });
           }}
         />
+        <Text align="right">
+          Total price:{" "}
+          <strong>{formatToDollar.format(watch("totalPrice") || 0)}</strong>
+        </Text>
         <StyledFooterWrapper>
-          <Text align="center">
-            Total price: {formatToDollar.format(watch("totalPrice") || 0)}
-          </Text>
           <StyledButtonsGrid>
             {props.cancelButton}
             <Button
