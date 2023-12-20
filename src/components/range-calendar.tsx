@@ -40,7 +40,6 @@ export function BookCalendar({
   numberOfChildren = 0,
   numberOfRooms = 1,
   onChange,
-  onChangeDatesInProgress,
   unavailableDates,
   defaultPrice,
   defaultValue,
@@ -196,10 +195,6 @@ export function BookCalendar({
   return (
     <I18nProvider locale="en">
       <RangeCalendar
-        onFocusChange={(date) => {
-          const start = format(date.toDate(getLocalTimeZone()), "yyyy-MM-dd");
-          onChangeDatesInProgress(start);
-        }}
         aria-label="Trip dates"
         visibleDuration={{ months: isMobile ? 1 : 2 }}
         pageBehavior="visible"
