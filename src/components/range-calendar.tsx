@@ -26,7 +26,7 @@ import styled from "styled-components";
 
 type BookCalenderProps = {
   onChange: (date: { start: string; end: string; totalPrice: number }) => void;
-  onChangeDatesInProgress: (date: string) => void;
+  onChangeDatesInProgress?: (date: string) => void;
   numberOfAdults?: number;
   numberOfChildren?: number;
   numberOfRooms?: number;
@@ -261,7 +261,7 @@ export function BookCalendar({
                     justifyContent: "center",
                     alignItems: "center",
                     gap: 0.2,
-                    width: "40px",
+                    maxWidth: "40px",
                     height: "40px",
                   }}
                 >
@@ -313,6 +313,8 @@ const StyledCalendarWrapper = styled("div")({
   justifyContent: "center",
   padding: "0.5rem",
   "@media (max-width: 591px)": {
+    width: "fit-content",
+    margin: "0 auto",
     flexDirection: "column",
   },
 });

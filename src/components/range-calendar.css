@@ -1,5 +1,5 @@
 .react-aria-RangeCalendar {
-  --highlight-background: indigo;
+  --highlight-background: #7575f8;
   --highlight-foreground: white;
   --button-background: var(--spectrum-global-color-gray-50);
   --button-backgound-pressed: var(--spectrum-global-color-gray-100);
@@ -75,12 +75,13 @@
     }
 
     &[data-selection-start] {
-      background-color: blue;
+      background-color: #4c4ddc;
       border-start-start-radius: 50%;
       border-end-start-radius: 50%;
     }
 
     &[data-selection-end] {
+      background-color: #4c4ddc;
       border-start-end-radius: 50%;
       border-end-end-radius: 50%;
     }
