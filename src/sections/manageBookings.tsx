@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Flex, Text } from "@radix-ui/themes";
 import { useBookingStore } from "../providers/bookingsProvider";
 import { Info } from "lucide-react";
+import { ActionsButtons } from "../components/bookingsActions";
+import { unformatFromDollar } from "../utils/formatCurrency";
 
 const Wrapper = styled.section({
   display: "flex",
@@ -47,47 +49,69 @@ const EmptyBookings = () => (
   </Flex>
 );
 
+type RowKind =
+  | {
+      rowKey: "id";
+      content: number;
+    }
+  | {
+      rowKey: "title";
+      content: string;
+    }
+  | {
+      rowKey: "period";
+      content: {
+        startDate: string;
+        endDate: string;
+      };
+    }
+  | {
+      rowKey: "bookingDetails";
+      content: {
+        adults: number;
+        children: number;
+        rooms: number;
+      };
+    }
+  | {
+      rowKey: "price";
+      content: string;
+    }
+  | {
+      rowKey: "status";
+      content: string;
+    }
+  | {
+      rowKey: "actions";
+      content: React.ReactNode;
+    };
+
+export type RowsType = RowKind[];
+
 export function ManageBookings() {
   const bookings = useBookingStore((state) => state.bookings);
 
-  const rows = bookings.map((booking) => [
-    {
-      rowKey: "id",
-      content: booking.id,
-    },
+  const bookingsIds = bookings.map((booking) => booking.id);
+
+  const rows: RowsType[] = bookings.map((booking) => [
     {
       rowKey: "title",
       content: booking.title,
     },
     {
       rowKey: "period",
-      content: [
-        {
-          title: "Start Date",
-          value: booking.startDate,
-        },
-        {
-          title: "End Date",
-          value: booking.endDate,
-        },
-      ],
+      content: {
+        startDate: booking.startDate,
+        endDate: booking.endDate,
+      },
     },
     {
       rowKey: "bookingDetails",
-      content: [
-        {
-          title: "Adults",
-          value: booking.numberOfAdults,
-        },
-        {
-          title: "Children",
-          value: booking.numberOfChildren,
-        },
-        {
-          title: "Rooms",
-          value: booking.numberOfRooms,
-        },
-      ],
+      content: {
+        adults: booking.numberOfAdults,
+        children: booking.numberOfChildren,
+        rooms: booking.numberOfRooms,
+      },
     },
     {
       rowKey: "price",
@@ -96,6 +120,23 @@ export function ManageBookings() {
     {
       rowKey: "status",
       content: booking.status,
+    },
+    {
+      rowKey: "actions",
+      content: (
+        <ActionsButtons
+          actions={["edit", "cancel"]}
+          bookingId={booking.id}
+          hotelTitle={booking.title}
+          startDate={booking.startDate}
+          endDate={booking.endDate}
+          totalPrice={unformatFromDollar(booking.price)}
+          numberOfAdults={booking.numberOfAdults}
+          numberOfChildren={booking.numberOfChildren}
+          numberOfRooms={booking.numberOfRooms}
+          status={booking.status}
+        />
+      ),
     },
   ]);
 
@@ -107,7 +148,7 @@ export function ManageBookings() {
         <>
           <Text
             as="span"
-            size="8"
+            size="6"
             style={{
               marginBottom: 16,
             }}
@@ -118,15 +159,15 @@ export function ManageBookings() {
             <BookingsTable
               actions={["edit", "cancel"]}
               headers={[
-                "id",
-                "Name",
+                "Hotel Name",
                 "Period",
-                "Booking Details",
+                "Details",
                 "Price",
                 "Status",
                 "Actions",
               ]}
               rows={rows}
+              bookingsIds={bookingsIds}
             />
           </Flex>
         </>
