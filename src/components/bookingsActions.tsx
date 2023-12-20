@@ -16,11 +16,13 @@ import { useBookingStore } from "../providers/bookingsProvider";
 import { useHotelStore } from "../providers/hotelsProvider";
 
 export const CancelBookingDialog = ({
+  mode = "cards",
   bookingId,
   hotelTitle,
   startDate,
   endDate,
 }: {
+  mode?: "table" | "cards";
   bookingId: number;
   hotelTitle: string;
   startDate: string;
@@ -30,15 +32,20 @@ export const CancelBookingDialog = ({
   const updateHotelAvailableDates = useHotelStore(
     (state) => state.updateHotelAvailableDates
   );
+  console.log("mode", mode);
 
   return (
     <Dialog
       trigger={
-        <IconButton variant="soft" color="crimson">
-          <Tooltip content="Cancel booking">
-            <TrashIcon />
-          </Tooltip>
-        </IconButton>
+        mode === "table" ? (
+          <IconButton variant="soft" color="crimson">
+            <Tooltip content="Cancel booking">
+              <TrashIcon />
+            </Tooltip>
+          </IconButton>
+        ) : (
+          <Button variant="danger">Cancel booking</Button>
+        )
       }
       children={
         <>
@@ -58,7 +65,7 @@ export const CancelBookingDialog = ({
                 onClick={() => {
                   deleteBooking(bookingId);
                   updateHotelAvailableDates({
-                    id: hotelTitle, // name
+                    id: hotelTitle,
                     bookedRangeDates: [startDate, endDate],
                     action: "makeRangeAvailable",
                   });
@@ -76,6 +83,7 @@ export const CancelBookingDialog = ({
 };
 
 export const EditBookigDialog = ({
+  mode = "cards",
   bookingId,
   hotelTitle,
   startDate,
@@ -85,6 +93,7 @@ export const EditBookigDialog = ({
   numberOfChildren,
   numberOfRooms,
 }: {
+  mode?: "table" | "cards";
   bookingId: number;
   hotelTitle: string;
   startDate: string;
@@ -112,16 +121,21 @@ export const EditBookigDialog = ({
       />
     }
     trigger={
-      <IconButton variant="soft" color="indigo">
-        <Tooltip content="Edit booking">
-          <Pencil1Icon />
-        </Tooltip>
-      </IconButton>
+      mode === "table" ? (
+        <IconButton variant="soft" color="indigo">
+          <Tooltip content="Edit booking">
+            <Pencil1Icon />
+          </Tooltip>
+        </IconButton>
+      ) : (
+        <Button variant="secondary">Edit</Button>
+      )
     }
   />
 );
 
 export const ActionsButtons = ({
+  mode = "cards",
   actions,
   bookingId,
   hotelTitle,
@@ -133,6 +147,7 @@ export const ActionsButtons = ({
   numberOfRooms,
   status,
 }: {
+  mode?: "table" | "cards";
   actions: ["edit", "cancel"];
   bookingId: number;
   hotelTitle: string;
@@ -143,31 +158,60 @@ export const ActionsButtons = ({
   numberOfChildren: number;
   numberOfRooms: number;
   status: string;
-}) => (
-  <StyledActionsWrapper gap="3">
-    {actions.map((action) =>
-      status === "Cancelled" ? null : action === "edit" ? (
-        <EditBookigDialog
-          bookingId={bookingId}
-          hotelTitle={hotelTitle}
-          startDate={startDate}
-          endDate={endDate}
-          totalPrice={totalPrice}
-          numberOfAdults={numberOfAdults}
-          numberOfChildren={numberOfChildren}
-          numberOfRooms={numberOfRooms}
-        />
-      ) : (
-        <CancelBookingDialog
-          bookingId={bookingId}
-          hotelTitle={hotelTitle}
-          startDate={startDate}
-          endDate={endDate}
-        />
-      )
-    )}
-  </StyledActionsWrapper>
-);
+}) =>
+  mode === "table" ? (
+    <StyledActionsWrapper gap="3">
+      {actions.map((action) =>
+        status === "Cancelled" ? null : action === "edit" ? (
+          <EditBookigDialog
+            mode={mode}
+            bookingId={bookingId}
+            hotelTitle={hotelTitle}
+            startDate={startDate}
+            endDate={endDate}
+            totalPrice={totalPrice}
+            numberOfAdults={numberOfAdults}
+            numberOfChildren={numberOfChildren}
+            numberOfRooms={numberOfRooms}
+          />
+        ) : (
+          <CancelBookingDialog
+            mode={mode}
+            bookingId={bookingId}
+            hotelTitle={hotelTitle}
+            startDate={startDate}
+            endDate={endDate}
+          />
+        )
+      )}
+    </StyledActionsWrapper>
+  ) : (
+    <StyledButtonsGrid>
+      {actions.map((action) =>
+        status === "Cancelled" ? null : action === "edit" ? (
+          <EditBookigDialog
+            mode={mode}
+            bookingId={bookingId}
+            hotelTitle={hotelTitle}
+            startDate={startDate}
+            endDate={endDate}
+            totalPrice={totalPrice}
+            numberOfAdults={numberOfAdults}
+            numberOfChildren={numberOfChildren}
+            numberOfRooms={numberOfRooms}
+          />
+        ) : (
+          <CancelBookingDialog
+            mode={mode}
+            bookingId={bookingId}
+            hotelTitle={hotelTitle}
+            startDate={startDate}
+            endDate={endDate}
+          />
+        )
+      )}
+    </StyledButtonsGrid>
+  );
 
 const StyledActionsWrapper = styled(Flex)({
   flexDirection: "row",
@@ -180,5 +224,6 @@ const StyledButtonsGrid = styled("div")({
   marginTop: "2rem",
   display: "grid",
   gridTemplateColumns: "repeat(2, 1fr)",
-  gap: "1rem",
+  gap: "0.5rem",
+  width: "100%",
 });

@@ -18,6 +18,7 @@ export function Explore() {
     <ExploreWrapper>
       {hotels.map((hotel) => (
         <Card
+          mode="explore"
           key={hotel.id}
           hotelName={hotel.title}
           hotelDescription={hotel.description}
