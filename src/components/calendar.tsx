@@ -21,7 +21,7 @@ import { Text } from "@radix-ui/themes";
 import { I18nProvider } from "@react-aria/i18n";
 import { theme } from "../providers/theme";
 import { CaretLeftIcon, CaretRightIcon } from "@radix-ui/react-icons";
-import "./range-calendar.css";
+import "./calendar.css";
 import styled from "styled-components";
 
 type BookCalenderProps = {

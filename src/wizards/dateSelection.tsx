@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { DialogTitle, DialogDescription, Flex, Text } from "@radix-ui/themes";
-import { BookCalendar } from "../components/range-calendar";
+import { BookCalendar } from "../components/calendar";
 import { Button } from "../components/button";
 import { ManualInput } from "../components/manualInput";
 import styled from "styled-components";
