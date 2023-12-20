@@ -29,7 +29,9 @@ export function BookingsTable(props: TableProps) {
       <TableHeader>
         <TableRow>
           {props.headers.map((header) => (
-            <StyledColumnHeaderCell>{header}</StyledColumnHeaderCell>
+            <StyledColumnHeaderCell key={header}>
+              {header}
+            </StyledColumnHeaderCell>
           ))}
         </TableRow>
       </TableHeader>
