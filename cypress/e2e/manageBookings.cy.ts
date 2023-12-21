@@ -42,7 +42,14 @@ describe("read bookings", () => {
         );
         cy.get("td[aria-label='row-period']")
           .find("div")
-          .should("contain", "01/15/24", "to", "01/22/24");
+          .find("span")
+          .first()
+          .should("contain", "01/15/24");
+        cy.get("td[aria-label='row-period']")
+          .find("div")
+          .find("span")
+          .last()
+          .should("contain", "01/22/24");
         cy.get("td[aria-label='row-price']").should("contain", "$2,000");
         cy.get("span[aria-label='adults-number']").should("contain", "1");
         cy.get("span[aria-label='children-number']").should("contain", "0");
@@ -100,7 +107,7 @@ describe("read bookings", () => {
       it("it should be able to change the number of adults and see the price on bookings list", () => {
         cy.get("td[aria-label='row-actions']").find("button").first().click();
         cy.get("h1").first().should("contain", "Availability");
-        cy.get("span[aria-label='adults-number']").should("contain", "1");
+        cy.get("span[aria-label='value-Adults']").should("contain", "1");
         cy.get("button[aria-label='increment-Adults']").click();
         cy.get("span[aria-label='value-Adults']").should("contain", "2");
         cy.get("strong[aria-label='total-price']").should("contain", "$3,000");
