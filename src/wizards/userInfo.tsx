@@ -20,7 +20,7 @@ const schema = () =>
   yup.object().shape({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
-    email: yup.string().required(),
+    email: yup.string().required().email(),
     creditCardNumber: yup.string().required().length(16),
   });
 
@@ -58,7 +58,7 @@ export function UserInfo(props: UserInfoProps) {
             <TextField.Input
               {...field}
               aria-label="First name"
-              placeholder="Enter your full name"
+              placeholder="Enter your first name"
             />
           )}
         />
@@ -66,7 +66,7 @@ export function UserInfo(props: UserInfoProps) {
           control={control}
           name="lastName"
           render={({ field }) => (
-            <TextField.Input {...field} placeholder="Enter your full name" />
+            <TextField.Input {...field} placeholder="Enter your last name" />
           )}
         />
         <Controller

@@ -83,8 +83,6 @@ export function DateSelection(props: PropsType) {
   const numberOfChildren = watch("numberOfChildren");
   const numberOfRooms = watch("numberOfRooms");
 
-  console.log("formState", formState);
-
   return (
     <form onSubmit={handleSubmit(props.onSubmit)}>
       <DialogTitle>Details and Availability</DialogTitle>

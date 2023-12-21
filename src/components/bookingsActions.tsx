@@ -32,8 +32,6 @@ export const CancelBookingDialog = ({
   const updateHotelAvailableDates = useHotelStore(
     (state) => state.updateHotelAvailableDates
   );
-  console.log("mode", mode);
-
   return (
     <Dialog
       trigger={
