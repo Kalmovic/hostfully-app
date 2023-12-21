@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "types": ["@testing-library/jest-dom", "jest", "cypress", "node"],
 
     /* Linting */
     "strict": true,
@@ -20,7 +21,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "types": ["cypress"],
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
