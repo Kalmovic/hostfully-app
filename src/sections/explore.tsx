@@ -4,7 +4,6 @@ import { useHotelStore } from "../providers/hotelsProvider";
 import { Button } from "../components/button";
 import { Dialog } from "../components/dialog";
 import { BookingWizard } from "../wizards/bookingWizard";
-import React from "react";
 
 const ExploreWrapper = styled.div({
   display: "flex",
