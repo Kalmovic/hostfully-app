@@ -1,6 +1,6 @@
 import { BookingsTable } from "../components/bookingsTable";
 import styled from "styled-components";
-import { Flex, IconButton, Text, Tooltip } from "@radix-ui/themes";
+import { Box, Flex, IconButton, Text, Tooltip } from "@radix-ui/themes";
 import { useBookingStore } from "../providers/bookingsProvider";
 import { Info } from "lucide-react";
 import { ActionsButtons } from "../components/bookingsActions";
@@ -82,13 +82,8 @@ type RowKind =
 export type RowsType = RowKind[];
 
 export function ManageBookings() {
-  const [renderMode, setRenderMode] = React.useState<"table" | "cards">(
-    "table"
-  );
   const bookings = useBookingStore((state) => state.bookings);
-
   const bookingsIds = bookings.map((booking) => booking.id);
-
   const rows: RowsType[] = bookings.map((booking) => [
     {
       rowKey: "title",
@@ -156,28 +151,14 @@ export function ManageBookings() {
           >
             Manage your bookings
           </Text>
-          <Tooltip
-            content={`Change to ${renderMode === "table" ? "cards" : "table"}`}
-          >
-            <IconButton
-              style={{
-                alignSelf: "start",
-                marginBottom: "1rem",
-              }}
-              variant="soft"
-              color="indigo"
-              aria-label="change-view-mode"
-              onClick={() =>
-                renderMode === "table"
-                  ? setRenderMode("cards")
-                  : setRenderMode("table")
-              }
-            >
-              {renderMode === "table" ? <TableIcon /> : <CardStackIcon />}
-            </IconButton>
-          </Tooltip>
           <Flex gap="4">
-            {renderMode === "table" ? (
+            <Box
+              width="100%"
+              display={{
+                initial: "none",
+                sm: "block",
+              }}
+            >
               <BookingsTable
                 actions={["edit", "cancel"]}
                 headers={[
@@ -191,44 +172,16 @@ export function ManageBookings() {
                 rows={rows}
                 bookingsIds={bookingsIds}
               />
-            ) : (
-              <BookingCardList>
-                {bookings.map((booking) => (
-                  <Card
-                    key={booking.id}
-                    mode="manage"
-                    hotelName={booking.title}
-                    bookPrice={unformatFromDollar(booking.price)}
-                    bookStatus={booking.status}
-                    startDate={booking.startDate}
-                    endDate={booking.endDate}
-                    numberOfAdults={booking.numberOfAdults}
-                    numberOfChildren={booking.numberOfChildren}
-                    numberOfRooms={booking.numberOfRooms}
-                    img={booking.image}
-                    actionButtons={[
-                      <ActionsButtons
-                        mode="cards"
-                        actions={["edit", "cancel"]}
-                        bookingId={booking.id}
-                        hotelTitle={booking.title}
-                        startDate={booking.startDate}
-                        endDate={booking.endDate}
-                        totalPrice={unformatFromDollar(booking.price)}
-                        numberOfAdults={booking.numberOfAdults}
-                        numberOfChildren={booking.numberOfChildren}
-                        numberOfRooms={booking.numberOfRooms}
-                        status={booking.status}
-                        firstName={booking.firstName}
-                        lastName={booking.lastName}
-                        email={booking.email}
-                        creditCardNumber={booking.creditCardNumber}
-                      />,
-                    ]}
-                  />
-                ))}
-              </BookingCardList>
-            )}
+            </Box>
+            <Box
+              width="100%"
+              display={{
+                initial: "block",
+                sm: "none",
+              }}
+            >
+              <MultipleViewsBookings rows={rows} bookingsIds={bookingsIds} />
+            </Box>
           </Flex>
         </>
       )}
@@ -249,3 +202,98 @@ const BookingCardList = styled.div({
   width: "100%",
   gap: 16,
 });
+
+const StyledIconButton = styled(IconButton)({
+  alignSelf: "start",
+  marginBottom: "1rem",
+  "@media (min-width: 768px)": {
+    display: "none",
+  },
+});
+
+const MultipleViewsBookings = ({
+  rows,
+  bookingsIds,
+}: {
+  rows: RowsType[];
+  bookingsIds: number[];
+}) => {
+  const isMobile = window.innerWidth <= 767;
+  const bookings = useBookingStore((state) => state.bookings);
+  const [renderMode, setRenderMode] = React.useState<"table" | "cards">(
+    isMobile ? "cards" : "table"
+  );
+  return (
+    <>
+      <Tooltip
+        content={`Change to ${renderMode === "table" ? "cards" : "table"}`}
+      >
+        <StyledIconButton
+          variant="soft"
+          color="indigo"
+          aria-label="change-view-mode"
+          onClick={() =>
+            renderMode === "table"
+              ? setRenderMode("cards")
+              : setRenderMode("table")
+          }
+        >
+          {renderMode === "table" ? <TableIcon /> : <CardStackIcon />}
+        </StyledIconButton>
+      </Tooltip>
+      {renderMode === "table" ? (
+        <BookingsTable
+          actions={["edit", "cancel"]}
+          headers={[
+            "Hotel Name",
+            "Period",
+            "Details",
+            "Price",
+            "Status",
+            "Actions",
+          ]}
+          rows={rows}
+          bookingsIds={bookingsIds}
+        />
+      ) : (
+        <BookingCardList>
+          {bookings.map((booking) => (
+            <Card
+              key={booking.id}
+              mode="manage"
+              hotelName={booking.title}
+              bookPrice={unformatFromDollar(booking.price)}
+              bookStatus={booking.status}
+              startDate={booking.startDate}
+              hotelDescription={booking.description}
+              endDate={booking.endDate}
+              numberOfAdults={booking.numberOfAdults}
+              numberOfChildren={booking.numberOfChildren}
+              numberOfRooms={booking.numberOfRooms}
+              img={booking.image}
+              actionButtons={[
+                <ActionsButtons
+                  mode="cards"
+                  actions={["edit", "cancel"]}
+                  bookingId={booking.id}
+                  hotelTitle={booking.title}
+                  startDate={booking.startDate}
+                  endDate={booking.endDate}
+                  totalPrice={unformatFromDollar(booking.price)}
+                  numberOfAdults={booking.numberOfAdults}
+                  numberOfChildren={booking.numberOfChildren}
+                  numberOfRooms={booking.numberOfRooms}
+                  status={booking.status}
+                  firstName={booking.firstName}
+                  lastName={booking.lastName}
+                  email={booking.email}
+                  creditCardNumber={booking.creditCardNumber}
+                />,
+              ]}
+            />
+          ))}
+        </BookingCardList>
+      )}
+    </>
+  );
+};
