@@ -42,11 +42,11 @@ export const CancelBookingDialog = ({
             </Tooltip>
           </IconButton>
         ) : (
-          <Button variant="danger">Cancel booking</Button>
+          <Button variant="danger">Cancellation</Button>
         )
       }
       children={
-        <>
+        <Flex direction="column" gap="4" p="2">
           <DialogTitle>Cancelling booking for {hotelTitle}</DialogTitle>
           <DialogDescription>
             Are you sure you want to cancel this booking? This will make the
@@ -74,7 +74,7 @@ export const CancelBookingDialog = ({
               </Button>
             </DialogClose>
           </StyledButtonsGrid>
-        </>
+        </Flex>
       }
     />
   );
@@ -247,8 +247,9 @@ const StyledActionsWrapper = styled(Flex)({
 });
 
 const StyledButtonsGrid = styled("div")({
-  marginTop: "2rem",
   display: "grid",
+  marginTop: "0.4rem",
+  justifyContent: "flex-end",
   gridTemplateColumns: "repeat(2, 1fr)",
   gap: "0.5rem",
   width: "100%",

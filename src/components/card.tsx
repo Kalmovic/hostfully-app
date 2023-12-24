@@ -16,16 +16,19 @@ type CardProps =
   | {
       mode: "explore";
       img: string;
+      hotelRating: string;
       hotelName: string;
       hotelDescription: string;
       hotelPrice: number;
       actionButtons?: React.ReactNode[];
+      ammenities?: string[];
     }
   | {
       mode: "manage";
       img: string;
       hotelName: string;
       bookPrice: number;
+      hotelDescription: string;
       bookStatus: "Active" | "Cancelled";
       actionButtons?: React.ReactNode[];
       numberOfAdults: number;
@@ -38,48 +41,98 @@ type CardProps =
 export function Card(props: CardProps) {
   return (
     <CardWrapper size="2">
-      <Inset clip="padding-box" side="top" pb="current">
-        <img
-          src={props.img}
-          loading="lazy"
-          alt="Hotel image"
-          height={140}
-          style={{
-            display: "block",
-            objectFit: "cover",
-            width: "100%",
-          }}
-        />
+      <Inset
+        clip="padding-box"
+        side="left"
+        pb="current"
+        style={{
+          padding: 0,
+        }}
+      >
+        <StyledImg src={props.img} loading="lazy" alt="Hotel image" />
       </Inset>
       {props.mode === "explore" ? (
-        <>
-          <Text as="p" size="4" weight="bold" aria-label="hotel-name">
-            {props.hotelName}
-          </Text>
-          <Text color="jade" as="p" size="1" style={{ marginBottom: 8 }}>
-            Starting at {formatToDollar.format(props.hotelPrice)}
-          </Text>
-          <Text
+        <StyledExploreContent style={{ marginLeft: 16 }}>
+          <StyledHotelName>{props.hotelName}</StyledHotelName>
+          <StyledRating>{props.hotelRating}</StyledRating>
+          <Flex
+            direction="column"
+            gap="1"
+            style={{
+              gridArea: "price",
+              alignSelf: "center",
+              justifySelf: "end",
+              justifyContent: "center",
+              textAlign: "end",
+            }}
+          >
+            <Text as="p" size="2">
+              Price / night
+            </Text>
+            <StyledPrice>{formatToDollar.format(props.hotelPrice)}</StyledPrice>
+            <Text as="p" size="2">
+              Fees and taxes included
+            </Text>
+          </Flex>
+          <StyledHotelDescription
             as="p"
             size="1"
             style={{
-              marginTop: 16,
+              marginTop: 2,
               marginBottom: 8,
-              height: 130,
+              maxWidth: 550,
+              maxHeight: 100,
               overflowY: "auto",
+              gridArea: "description",
             }}
           >
             {props.hotelDescription}
-          </Text>
-        </>
+          </StyledHotelDescription>
+          <StyledAmmenitiesWrapper>
+            {props.ammenities &&
+              props.ammenities.map((ammenity) => (
+                <Badge
+                  key={ammenity}
+                  color="green"
+                  radius="full"
+                  size={"1"}
+                  style={{
+                    width: "fit-content",
+                    alignSelf: "start",
+                  }}
+                >
+                  {ammenity}
+                </Badge>
+              ))}
+          </StyledAmmenitiesWrapper>
+          <StyledButtons>{props.actionButtons}</StyledButtons>
+        </StyledExploreContent>
       ) : (
-        <Flex direction="column" gap="2">
-          <Text as="p" size="4" weight="bold">
-            {props.hotelName}
-          </Text>
+        <StyledManageContent>
+          <StyledHotelName>{props.hotelName}</StyledHotelName>
+          <Flex
+            direction="column"
+            gap="1"
+            style={{
+              gridArea: "price",
+              alignSelf: "center",
+              justifySelf: "end",
+              justifyContent: "center",
+              textAlign: "end",
+            }}
+          >
+            <Text as="p" size="2">
+              Total price
+            </Text>
+            <StyledPrice>{formatToDollar.format(props.bookPrice)}</StyledPrice>
+            <Text as="p" size="2">
+              Fees and taxes included
+            </Text>
+          </Flex>
           <Badge
             color={props.bookStatus === "Active" ? "green" : "red"}
             style={{
+              gridArea: "status",
               width: "fit-content",
               alignSelf: "start",
             }}
@@ -119,41 +172,27 @@ export function Card(props: CardProps) {
               <Text size="2">{props.numberOfChildren}</Text>
             </Flex>
           </StyledBookingDetails>
-        </Flex>
+          <StyledButtons>{props.actionButtons}</StyledButtons>
+        </StyledManageContent>
       )}
-      <Flex
-        direction="column"
-        justify="between"
-        style={{
-          marginTop: "auto",
-        }}
-      >
-        {props.actionButtons}
-      </Flex>
     </CardWrapper>
   );
 }
 
 const CardWrapper = styled(RadixCard)({
   display: "flex",
-  flexDirection: "column",
+  flexDirection: "row",
   border: "1px solid #ccc",
-  borderRadius: 4,
   overflow: "hidden",
   marginBottom: 16,
   boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.2)",
   width: "100%",
-  maxWidth: 300,
   maxHeight: 600,
-  img: {
-    width: 200,
-    height: 150,
-    objectFit: "fill",
-  },
   ".rt-CardInner": {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     height: "100%",
+    marginTop: 0,
   },
   "@media (max-width: 768px)": {
     maxWidth: "unset",
@@ -161,13 +200,181 @@ const CardWrapper = styled(RadixCard)({
 });
 
 const StyledPeriodText = styled(Flex)({
+  backgroundColor: theme.colors.surface,
+  border: "1px solid black",
+  borderRadius: "0.5rem",
   padding: "0.25rem 0.5rem",
+  height: "fit-content",
   width: "fit-content",
   alignItems: "center",
+  gridArea: "period",
 });
 
 const StyledBookingDetails = styled(Flex)({
+  backgroundColor: theme.colors.surface,
+  border: "1px solid black",
+  borderRadius: "0.5rem",
   padding: "0.25rem 0.5rem",
+  height: "fit-content",
   width: "fit-content",
   alignItems: "center",
+  gridArea: "bookingDetails",
+});
+
+const StyledImg = styled("img")({
+  display: "block",
+  width: 350,
+  height: "100%",
+  objectFit: "cover",
+  borderRadius: 8,
+  "@media (max-width: 1000px)": {
+    width: 250,
+  },
+  "@media (max-width: 768px)": {
+    width: 200,
+  },
+  "@media (max-width: 620px)": {
+    width: 150,
+  },
+});
+
+const StyledAmmenitiesWrapper = styled("div")({
+  gridArea: "ammenities",
+  width: "fit-content",
+  display: "grid",
+  height: "fit-content",
+  marginTop: "auto",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gap: 8,
+  "@media (max-width: 710px)": {
+    gridTemplateColumns: "repeat(2, 1fr)",
+  },
+  "@media (max-width: 580px)": {
+    display: "none",
+  },
+});
+
+const StyledHotelDescription = styled(Text)({
+  width: "100%",
+  "&::-webkit-scrollbar": {
+    width: "5px",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    borderRadius: "8px",
+    backgroundColor: theme.colors.primary /* Set thumb color */,
+  },
+  "&::-webkit-scrollbar-track": {
+    borderRadius: "8px",
+    backgroundColor: theme.colors.primaryLight,
+  },
+  "@media (max-width: 768px)": {
+    display: "none",
+  },
+});
+
+const StyledExploreContent = styled("div")({
+  width: "100%",
+  display: "grid",
+  gridTemplateAreas: `
+    "title title rating"
+    "description description price"
+    "ammenities ammenities button"
+  `,
+  gridTemplateColumns: "2fr 1fr 1.5fr",
+  "@media (max-width: 768px)": {
+    rowGap: 8,
+    gridTemplateAreas: `
+    "title title title"
+    "rating rating rating"
+    "ammenities ammenities price"
+    "button button button"
+    `,
+    gridTemplateColumns: "1fr",
+  },
+  "@media (max-width: 580px)": {
+    gridTemplateAreas: `
+    "title title title"
+    "rating rating rating"
+    "price price price"
+    "button button button"
+  `,
+    gridTemplateColumns: "1fr",
+  },
+});
+
+const StyledManageContent = styled("div")({
+  marginLeft: 16,
+  rowGap: 0,
+  width: "100%",
+  display: "grid",
+  gridTemplateAreas: `
+    "title title title"
+    "status status price"
+    "period period price"
+    "bookingDetails bookingDetails button"
+  `,
+  gridTemplateColumns: "2fr 1fr 1.5fr",
+  "@media (max-width: 768px)": {
+    rowGap: 8,
+    gridTemplateAreas: `
+    "title title title"
+    "status status price"
+    "period period price"
+    "bookingDetails bookingDetails price"
+    "button button button"
+    `,
+    gridTemplateColumns: "2fr 1fr 1.5fr",
+  },
+  "@media (max-width: 450px)": {
+    gridTemplateAreas: `
+    "title title title"
+    "status status status"
+    "price price price"
+    "period period period"
+    "bookingDetails bookingDetails bookingDetails"
+    "button button button"
+    `,
+    gridTemplateColumns: "2fr 1fr 1.5fr",
+  },
+});
+
+const StyledButtons = styled("div")({
+  gridArea: "button",
+  marginLeft: "auto",
+  width: "100%",
+  "@media (max-width: 580px)": {
+    marginLeft: 0,
+  },
+});
+
+const StyledRating = styled("span")({
+  gridArea: "rating",
+  alignSelf: "center",
+  justifySelf: "end",
+  padding: "0.6rem",
+  backgroundColor: theme.colors.primary,
+  color: theme.colors.white,
+  borderRadius: 8,
+  "@media (max-width: 768px)": {
+    justifySelf: "start",
+    padding: "0.4rem 0.55rem",
+  },
+});
+
+const StyledPrice = styled("span")({
+  fontSize: 48,
+  lineHeight: 1,
+  fontWeight: 100,
+  "@media (max-width: 768px)": {
+    fontSize: 32,
+  },
+});
+
+const StyledHotelName = styled(Text)({
+  gridArea: "title",
+  fontWeight: 500,
+  fontSize: 28,
+  "@media (max-width: 768px)": {
+    fontSize: 20,
+  },
 });

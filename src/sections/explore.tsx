@@ -4,12 +4,15 @@ import { useHotelStore } from "../providers/hotelsProvider";
 import { Button } from "../components/button";
 import { Dialog } from "../components/dialog";
 import { BookingWizard } from "../wizards/bookingWizard";
+import React from "react";
 
 const ExploreWrapper = styled.div({
   display: "flex",
-  flexDirection: "row",
+  alignItems: "center",
+  margin: "0 auto",
+  flexDirection: "column",
   flexWrap: "wrap",
-  gap: 16,
+  gap: 2,
 });
 
 export function Explore() {
@@ -21,11 +24,14 @@ export function Explore() {
           mode="explore"
           key={hotel.id}
           hotelName={hotel.title}
+          hotelRating={hotel.rating}
           hotelDescription={hotel.description}
           hotelPrice={hotel.defaultPrice}
           img={hotel.image}
+          ammenities={hotel.ammenities}
           actionButtons={[
             <Dialog
+              key={hotel.id}
               children={
                 <BookingWizard
                   mode="create"
@@ -33,7 +39,16 @@ export function Explore() {
                   hotelDefaultPrice={hotel.defaultPrice}
                 />
               }
-              trigger={<Button fullWidth>Book now</Button>}
+              trigger={
+                <Button
+                  fullWidth
+                  style={{
+                    marginTop: "1rem",
+                  }}
+                >
+                  Book now
+                </Button>
+              }
             />,
           ]}
         />
