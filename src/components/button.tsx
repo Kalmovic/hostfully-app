@@ -37,12 +37,19 @@ const StyledButton = styled(RadixButton)<ButtonProps>(
   })
 );
 
-export function Button(props: ButtonProps) {
-  const { children, variant = "primary", ...rest } = props;
+export const Button = React.forwardRef(
+  (props: ButtonProps, ref: React.Ref<HTMLButtonElement>) => {
+    const { children, variant = "primary", fullWidth = false, ...rest } = props;
 
-  return (
-    <StyledButton {...rest} variant={props.disabled ? "disabled" : variant}>
-      {children}
-    </StyledButton>
-  );
-}
+    return (
+      <StyledButton
+        {...rest}
+        ref={ref}
+        fullWidth={fullWidth}
+        variant={props.disabled ? "disabled" : variant}
+      >
+        {children}
+      </StyledButton>
+    );
+  }
+);
