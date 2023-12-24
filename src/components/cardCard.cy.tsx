@@ -13,6 +13,8 @@ describe("<Card />", () => {
         <ThemeProvider theme={theme}>
           <Card
             mode="explore"
+            hotelRating="5"
+            ammenities={["ammenity1", "ammenity2"]}
             hotelDescription="test description"
             img="https://picsum.photos/seed/picsum/200/300"
             hotelPrice={100}
@@ -38,6 +40,7 @@ describe("<Card />", () => {
             hotelName="test hotel name"
             numberOfAdults={1}
             numberOfChildren={1}
+            hotelDescription="test description"
             numberOfRooms={1}
             key={1}
             actionButtons={[
