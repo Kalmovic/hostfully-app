@@ -4,7 +4,7 @@ This project was created to fulfill the requirements of the Hostfully challenge.
 
 ## Live app
 
-You can find the live app [here](https://hostfully-jgv42715a-kalmovic.vercel.app/).
+You can find the live app [here](https://hostfully-app-jk.netlify.app/).
 
 ## App architecture
 
