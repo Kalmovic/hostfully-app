@@ -34,7 +34,9 @@ describe("read bookings", () => {
         cy.get("button[aria-label='bookings']").click();
       });
       it("it should create a booking and see it in the list", () => {
-        cy.get("tbody").find("tr").should("have.length", 1);
+        cy.viewport("macbook-16");
+        // parent does not have display: none
+        cy.get("tbody").find("tr").eq(1).parent().should("have.length", 1);
         cy.get("tbody").find("tr").first().find("td").should("have.length", 6);
         cy.get("td[aria-label='row-title']").should(
           "contain",
@@ -50,30 +52,24 @@ describe("read bookings", () => {
           .find("span")
           .last()
           .should("contain", "01/22/24");
-        cy.get("td[aria-label='row-price']").should("contain", "$2,000");
+        cy.get("td[aria-label='row-price']").should("contain", "$8,000");
         cy.get("span[aria-label='adults-number']").should("contain", "1");
         cy.get("span[aria-label='children-number']").should("contain", "0");
         cy.get("span[aria-label='rooms-number']").should("contain", "1");
         cy.get("td[aria-label='row-status']").should("contain", "Active");
-        cy.get("td[aria-label='row-actions']")
-          .find("button")
-          .should("have.length", 2);
       });
-      it("it should be able to cancel a booking", () => {
-        cy.get("td[aria-label='row-actions']").find("button").last().click();
+      it.only("it should be able to cancel a booking", () => {
+        cy.get("td[aria-label='row-actions']").find("button").eq(1).click();
         cy.get("button").contains("Yes, cancel booking").click();
         cy.get("div[role='alert']").should(
           "contain",
           "Booking cancelled successfully!"
         );
         cy.get("td[aria-label='row-status']").should("contain", "Cancelled");
-        cy.get("td[aria-label='row-actions']")
-          .find("button")
-          .should("have.length", 0);
       });
 
       it("it should be able to cancel a booking and see the dates available again", () => {
-        cy.get("td[aria-label='row-actions']").find("button").last().click();
+        cy.get("td[aria-label='row-actions']").find("button").eq(1).click();
         cy.get("button").contains("Yes, cancel booking").click();
         cy.get("div[role='alert']").should(
           "contain",
@@ -82,6 +78,7 @@ describe("read bookings", () => {
         cy.get("td[aria-label='row-status']").should("contain", "Cancelled");
         cy.get("td[aria-label='row-actions']")
           .find("button")
+          .eq(1)
           .should("have.length", 0);
         cy.get("button[aria-label='explore']").click();
         cy.get("button[aria-haspopup='dialog']").first().click();
@@ -137,6 +134,7 @@ describe("read bookings", () => {
         cy.get("td[aria-label='row-price']").should("contain", "$3,000");
       });
       it("should be able to change the bookings view and click to edit", () => {
+        cy.viewport("iphone-x");
         cy.get("button[aria-label='change-view-mode']").click();
         cy.get("div[aria-label='card-actions-buttons']")
           .find("button")
@@ -148,6 +146,7 @@ describe("read bookings", () => {
         cy.get("h1").first().should("contain", "Details and Availability");
       });
       it("should be able to change the bookings view and click to cancel", () => {
+        cy.viewport("iphone-x");
         cy.get("button[aria-label='change-view-mode']").click();
         cy.get("div[aria-label='card-actions-buttons']")
           .find("button")

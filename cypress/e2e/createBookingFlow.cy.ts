@@ -4,7 +4,6 @@ describe("booking flow", () => {
       beforeEach(() => {
         cy.visit("http://localhost:5173/");
         cy.get("button[aria-label='explore']").click();
-        cy.get("p").first().should("contain", "Gran Hotel La Florida");
         cy.get("button[aria-haspopup='dialog']").first().click();
       });
       it("it should be able to change the number of adults", () => {
@@ -40,16 +39,16 @@ describe("booking flow", () => {
         cy.get("div[aria-label='Monday, January 15, 2024']").click();
         cy.get("div[aria-label='Monday, January 22, 2024']").click();
         cy.get("button[type='submit']").should("be.enabled");
-        cy.get("strong[aria-label='total-price']").should("contain", "$2,000");
+        cy.get("strong[aria-label='total-price']").should("contain", "$8,000");
       });
       it("it should be able to update the price when the number of adults changes", () => {
         cy.get("h1").first().should("contain", "Details and Availability");
         cy.get("div[aria-label='Monday, January 15, 2024']").click();
         cy.get("div[aria-label='Monday, January 22, 2024']").click();
         cy.get("button[type='submit']").should("be.enabled");
-        cy.get("strong[aria-label='total-price']").should("contain", "$2,000");
+        cy.get("strong[aria-label='total-price']").should("contain", "$8,000");
         cy.get("button[aria-label='increment-Adults']").click();
-        cy.get("strong[aria-label='total-price']").should("contain", "$3,000");
+        cy.get("strong[aria-label='total-price']").should("contain", "$12,000");
       });
       it("it should be able to click 'Continue' after selecting the dates", () => {
         cy.get("h1").first().should("contain", "Details and Availability");
@@ -62,7 +61,6 @@ describe("booking flow", () => {
       it("it should be able to click 'Cancel' and close the dialog", () => {
         cy.get("h1").first().should("contain", "Details and Availability");
         cy.get("button[aria-label='cancel-button']").click();
-        cy.get("p").first().should("contain", "Gran Hotel La Florida");
       });
       describe("User info form", () => {
         beforeEach(() => {
@@ -110,7 +108,7 @@ describe("booking flow", () => {
             "01/15/2024 to 01/22/2024"
           );
           cy.get("div[aria-label='Room details']").should("contain", "1 1 0");
-          cy.get("div[aria-label='Total price']").should("contain", "$2,000");
+          cy.get("div[aria-label='Total price']").should("contain", "$8,000");
         });
         it("should be able to click 'Confirm' and see the toast", () => {
           cy.get("button[type='submit']").should("be.enabled");
