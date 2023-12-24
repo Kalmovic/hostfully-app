@@ -9,11 +9,13 @@ import img6 from "../assets/bookingImg6.png";
 type Hotel = {
   id: number;
   title: string;
+  rating: string;
   description: string;
   defaultPrice: number;
   location: string;
   image: string;
   unavailableDates: string[][];
+  ammenities: string[];
 };
 
 type HotelStore = {
@@ -34,9 +36,18 @@ const initialState = {
     {
       id: 1,
       title: "Gran Hotel La Florida",
+      rating: "9,5",
       description:
         "The Gran Hotel La Florida is a 5-star hotel located on Mount Tibidabo, the highest point of the Collserola Ridge in the Sarrià-Sant Gervasi district of Barcelona. It is located in a restored building that dates back to the early 20th century and was inaugurated on 23 February 1925 by King Alfonso XIII of Spain. It was originally known as the Hotel del Tibidabo.",
-      defaultPrice: 100,
+      ammenities: [
+        "Free Wi-Fi",
+        "Air conditioning",
+        "Beachfront",
+        "Fitness center",
+        "Spa",
+        "Pool",
+      ],
+      defaultPrice: 400,
       location: "London",
       image: img1,
       unavailableDates: [
@@ -47,8 +58,17 @@ const initialState = {
     {
       id: 2,
       title: "El Palace Barcelona",
+      rating: "9,0",
       description:
         "The hotel El Palace Barcelona is a historic luxury hotel located in Gran Via de les Corts Catalanes, 668, between Passeig de Gràcia and Pau Claris, in the center of Barcelona. It was inaugurated in 1919 and designed by the architect Adolf Florensa.",
+      ammenities: [
+        "Free Wi-Fi",
+        "Air conditioning",
+        "Pool",
+        "Beachfront",
+        "Fitness center",
+        "24h room service",
+      ],
       defaultPrice: 200,
       location: "London",
       image: img2,
@@ -60,9 +80,11 @@ const initialState = {
     {
       id: 3,
       title: "Hotel Rio Lancaster",
+      rating: "8,5",
       description:
         "The Rio Lancaster Hotel is a hotel located on Avenida Atlântica, in Copacabana, Rio de Janeiro. It is one of the most traditional hotels in the city, having been inaugurated in 1950. It is located in front of the beach, between the streets of Constante Ramos and Santa Clara.",
-      defaultPrice: 300,
+      ammenities: ["Free Wi-Fi", "Air conditioning", "Spa", "Fitness center"],
+      defaultPrice: 100,
       location: "London",
       image: img3,
       unavailableDates: [
@@ -73,8 +95,17 @@ const initialState = {
     {
       id: 4,
       title: "Hotel Fasano Rio de Janeiro",
+      rating: "9,0",
       description:
         "The Hotel Fasano Rio de Janeiro is a luxury hotel located on Avenida Vieira Souto, in front of Ipanema Beach, in Rio de Janeiro. It was inaugurated in 2007 and is the first hotel of the Fasano chain outside São Paulo. It is located in a building designed by the architect Oscar Niemeyer.",
+      ammenities: [
+        "Free Wi-Fi",
+        "Air conditioning",
+        "Beachfront",
+        "Restaurant",
+        "Bar",
+        "Transfer service",
+      ],
       defaultPrice: 400,
       location: "London",
       image: img4,
@@ -86,9 +117,18 @@ const initialState = {
     {
       id: 5,
       title: "Hotel Nacional Rio de Janeiro",
+      rating: "8,5",
       description:
         "The Hotel Nacional Rio de Janeiro is a hotel located on Avenida Niemeyer, in São Conrado, Rio de Janeiro. It was inaugurated in 1972 and is considered one of the most luxurious hotels in the city. It was designed by the architect Oscar Niemeyer and is located in front of the beach.",
-      defaultPrice: 500,
+      ammenities: [
+        "Free Wi-Fi",
+        "Air conditioning",
+        "Pool",
+        "Beachfront",
+        "Restaurant",
+        "Transfer service",
+      ],
+      defaultPrice: 200,
       location: "London",
       image: img5,
       unavailableDates: [
@@ -99,8 +139,17 @@ const initialState = {
     {
       id: 6,
       title: "Hotel Copacabana Palace",
+      rating: "9,8",
       description:
         "The Copacabana Palace Hotel is a luxury hotel located on Avenida Atlântica, in Copacabana, Rio de Janeiro. It was inaugurated in 1923 and is considered the most famous hotel in Brazil. It is located in front of the beach, between the streets of Constante Ramos and Santa Clara.",
+      ammenities: [
+        "Free Wi-Fi",
+        "Air conditioning",
+        "Pool",
+        "Beachfront",
+        "Spa",
+        "24h room service",
+      ],
       defaultPrice: 600,
       location: "London",
       image: img6,
