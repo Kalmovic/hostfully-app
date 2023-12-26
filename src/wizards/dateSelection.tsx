@@ -213,5 +213,6 @@ const StyledBookingDetailsWrapper = styled(Flex)({
     flexDirection: "column",
     gap: "0.5rem",
     padding: "0.25rem 0.25rem",
+    marginBottom: 12,
   },
 });
