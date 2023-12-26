@@ -364,7 +364,6 @@ const StyledRating = styled("span")({
 const StyledPrice = styled("span")({
   fontSize: 48,
   lineHeight: 1,
-  fontWeight: 100,
   "@media (max-width: 768px)": {
     fontSize: 32,
   },
