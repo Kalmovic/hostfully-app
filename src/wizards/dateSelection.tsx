@@ -53,7 +53,10 @@ type PropsType =
 const schema = () =>
   yup.object().shape({
     startDate: yup.string().required(),
-    endDate: yup.string().required(),
+    endDate: yup
+      .string()
+      .required()
+      .notOneOf([yup.ref("startDate")], "Select at least 2 days"),
     totalPrice: yup.number().required(),
     numberOfAdults: yup.number().required().min(1),
     numberOfChildren: yup.number().required().min(0),
@@ -153,12 +156,15 @@ export function DateSelection(props: PropsType) {
             });
           }}
         />
-        <Text align="right">
-          Total price:{" "}
-          <strong aria-label="total-price">
-            {formatToDollar.format(watch("totalPrice") || 0)}
-          </strong>
-        </Text>
+        <Flex justify="between" align="center">
+          <Text color="red">{formState.errors.endDate?.message}</Text>
+          <Text align="right">
+            Total price:{" "}
+            <strong aria-label="total-price">
+              {formatToDollar.format(watch("totalPrice") || 0)}
+            </strong>
+          </Text>
+        </Flex>
         <StyledFooterWrapper>
           <StyledButtonsGrid>
             {props.cancelButton}
