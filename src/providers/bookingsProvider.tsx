@@ -35,8 +35,8 @@ export const useBookingStore = create<BookingStore>()((set) => ({
   addBooking: (booking) => {
     set((state) => ({
       bookings: [
-        ...state.bookings,
         { ...booking, id: state.bookings.length + 1 },
+        ...state.bookings,
       ],
     }));
   },
