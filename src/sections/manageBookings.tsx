@@ -200,7 +200,7 @@ const BookingCardList = styled.div({
   flexDirection: "row",
   flexWrap: "wrap",
   width: "100%",
-  gap: 16,
+  gap: 2,
 });
 
 const StyledIconButton = styled(IconButton)({
