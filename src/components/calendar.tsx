@@ -195,7 +195,7 @@ export function BookCalendar({
   return (
     <I18nProvider locale="en">
       <RangeCalendar
-        aria-label="Trip dates"
+        aria-label="Hotel dates"
         visibleDuration={{ months: isMobile ? 1 : 2 }}
         pageBehavior="visible"
         minValue={now}
