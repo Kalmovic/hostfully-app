@@ -119,18 +119,6 @@ export function ManageBookings() {
           mode="table"
           actions={["edit", "cancel"]}
           bookingId={booking.id}
-          hotelTitle={booking.title}
-          startDate={booking.startDate}
-          endDate={booking.endDate}
-          totalPrice={unformatFromDollar(booking.price)}
-          numberOfAdults={booking.numberOfAdults}
-          numberOfChildren={booking.numberOfChildren}
-          numberOfRooms={booking.numberOfRooms}
-          status={booking.status}
-          firstName={booking.firstName}
-          lastName={booking.lastName}
-          email={booking.email}
-          creditCardNumber={booking.creditCardNumber}
         />
       ),
     },
@@ -273,21 +261,10 @@ const MultipleViewsBookings = ({
               img={booking.image}
               actionButtons={[
                 <ActionsButtons
+                  key={booking.id}
                   mode="cards"
                   actions={["edit", "cancel"]}
                   bookingId={booking.id}
-                  hotelTitle={booking.title}
-                  startDate={booking.startDate}
-                  endDate={booking.endDate}
-                  totalPrice={unformatFromDollar(booking.price)}
-                  numberOfAdults={booking.numberOfAdults}
-                  numberOfChildren={booking.numberOfChildren}
-                  numberOfRooms={booking.numberOfRooms}
-                  status={booking.status}
-                  firstName={booking.firstName}
-                  lastName={booking.lastName}
-                  email={booking.email}
-                  creditCardNumber={booking.creditCardNumber}
                 />,
               ]}
             />

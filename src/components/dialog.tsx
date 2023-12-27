@@ -31,11 +31,20 @@ const MobileDialogContent = styled(DialogContent)({
 export function Dialog(props: {
   trigger: React.ReactNode;
   children: React.ReactNode;
+  onLeaveDialog?: () => void;
 }) {
   return (
     <MobileDialogRoot>
       <DialogTrigger>{props.trigger}</DialogTrigger>
-      <MobileDialogContent>{props.children}</MobileDialogContent>
+      <MobileDialogContent
+        autoFocus
+        onEscapeKeyDown={(e) => e.preventDefault()}
+        onPointerDownOutside={() => {
+          props.onLeaveDialog && props.onLeaveDialog();
+        }}
+      >
+        {props.children}
+      </MobileDialogContent>
     </MobileDialogRoot>
   );
 }

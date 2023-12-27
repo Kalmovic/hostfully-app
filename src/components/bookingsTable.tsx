@@ -37,6 +37,7 @@ export function BookingsTable(props: TableProps) {
       </TableHeader>
       <TableBody>
         {props.rows.map((row, i) => {
+          if (!row?.[i]) return null;
           return (
             <StyledRow key={row[i].rowKey}>
               {row.map((cell) => {

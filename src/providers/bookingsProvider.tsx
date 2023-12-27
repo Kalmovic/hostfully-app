@@ -17,10 +17,13 @@ type Booking = {
   email: string;
   creditCardNumber: string;
   status: "Active" | "Cancelled";
+  totalPrice: number;
+  defaultPrice: number;
 };
 
 type BookingStore = {
   bookings: Booking[];
+  bookingsById: Record<number, Booking>;
   addBooking: (booking: Booking) => void;
   deleteBooking: (id: number) => void;
   updateBooking: (id: number, booking: Booking) => void;
@@ -32,23 +35,49 @@ const initialState = {
 
 export const useBookingStore = create<BookingStore>()((set) => ({
   ...initialState,
+  bookingsById: {},
   addBooking: (booking) => {
-    set((state) => ({
-      bookings: [
-        { ...booking, id: state.bookings.length + 1 },
-        ...state.bookings,
-      ],
-    }));
+    set((state) => {
+      const id = state.bookings.length + 1;
+      return {
+        bookings: [{ ...booking, id }, ...state.bookings],
+        bookingsById: {
+          [id]: {
+            ...booking,
+            id,
+          },
+          ...state.bookingsById,
+        },
+      };
+    });
   },
   deleteBooking: (id) => {
     set((state) => {
+      const deletedBooking = {
+        ...state.bookingsById[id],
+        status: "Cancelled",
+      } as Booking;
+      const filteredBookings = state.bookings.filter(
+        (booking) => booking.id !== id
+      );
+      const firstCancelledBookingIndex = filteredBookings.findIndex(
+        (booking) => booking.status === "Cancelled"
+      );
+      if (firstCancelledBookingIndex !== -1) {
+        filteredBookings.splice(firstCancelledBookingIndex, 0, deletedBooking);
+      } else {
+        filteredBookings.push(deletedBooking);
+      }
+
+      const updatedBookings =
+        state.bookings.length === 1 ? [deletedBooking] : filteredBookings;
+
       return {
-        bookings: state.bookings.map((b) => {
-          if (b.id === id) {
-            return { ...b, status: "Cancelled" };
-          }
-          return b;
-        }),
+        bookings: updatedBookings,
+        bookingsById: {
+          ...state.bookingsById,
+          [id]: { ...deletedBooking, status: "Cancelled" },
+        },
       };
     });
   },
@@ -60,6 +89,10 @@ export const useBookingStore = create<BookingStore>()((set) => ({
         }
         return b;
       }),
+      bookingsById: {
+        ...state.bookingsById,
+        [id]: booking,
+      },
     }));
   },
 }));
