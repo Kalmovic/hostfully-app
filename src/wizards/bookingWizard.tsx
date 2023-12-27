@@ -150,24 +150,6 @@ export function BookingWizard({
     updateHotelAvailableDates,
   ]);
 
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      const focusedElement = document.activeElement;
-      if (
-        props.mode === "edit" &&
-        event.key === "Escape" &&
-        focusedElement?.role === "dialog"
-      ) {
-        onUpdateCancel();
-      }
-    };
-    window.addEventListener("keydown", handleKeyPress);
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.mode, wizardState.data]);
-
   const onUpdateCancel = () => {
     if (props.mode === "create") return; // required for type safety
     updateHotelAvailableDates({
@@ -207,6 +189,7 @@ export function BookingWizard({
         image: hotel.image,
         location: hotel.location,
         price: formatToDollar.format(bookingInfo.totalPrice),
+        defaultPrice: hotelDefaultPrice,
         title: hotel.title,
         status: "Active",
       });
@@ -218,6 +201,7 @@ export function BookingWizard({
         image: hotel.image,
         location: hotel.location,
         price: formatToDollar.format(bookingInfo.totalPrice),
+        defaultPrice: hotelDefaultPrice,
         title: hotel.title,
         ...bookingInfo,
         status: "Active",
