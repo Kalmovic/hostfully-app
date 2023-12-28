@@ -50,10 +50,7 @@ const initialState = {
       defaultPrice: 400,
       location: "London",
       image: img1,
-      unavailableDates: [
-        ["2024-01-10", "2024-01-13"],
-        ["2023-12-22", "2023-12-24"],
-      ],
+      unavailableDates: [],
     },
     {
       id: 2,
@@ -72,10 +69,7 @@ const initialState = {
       defaultPrice: 200,
       location: "London",
       image: img2,
-      unavailableDates: [
-        ["2024-01-10", "2024-01-13"],
-        ["2023-12-22", "2023-12-24"],
-      ],
+      unavailableDates: [],
     },
     {
       id: 3,
@@ -87,10 +81,7 @@ const initialState = {
       defaultPrice: 100,
       location: "London",
       image: img3,
-      unavailableDates: [
-        ["2024-01-10", "2024-01-13"],
-        ["2023-12-22", "2023-12-24"],
-      ],
+      unavailableDates: [],
     },
     {
       id: 4,
@@ -109,10 +100,7 @@ const initialState = {
       defaultPrice: 400,
       location: "London",
       image: img4,
-      unavailableDates: [
-        ["2024-01-10", "2024-01-13"],
-        ["2023-12-22", "2023-12-24"],
-      ],
+      unavailableDates: [],
     },
     {
       id: 5,
@@ -131,10 +119,7 @@ const initialState = {
       defaultPrice: 200,
       location: "London",
       image: img5,
-      unavailableDates: [
-        ["2024-01-10", "2024-01-13"],
-        ["2023-12-22", "2023-12-24"],
-      ],
+      unavailableDates: [],
     },
     {
       id: 6,
@@ -153,10 +138,7 @@ const initialState = {
       defaultPrice: 600,
       location: "London",
       image: img6,
-      unavailableDates: [
-        ["2024-01-10", "2024-01-13"],
-        ["2023-12-22", "2023-12-24"],
-      ],
+      unavailableDates: [],
     },
   ],
 };
