@@ -17,13 +17,6 @@ describe("read bookings", () => {
         cy.get("div[aria-label='Monday, January 22, 2024']").click();
         cy.get("button[type='submit']").should("be.enabled");
         cy.get("button[type='submit']").click();
-        cy.get("h1").first().should("contain", "Information");
-        cy.get("input[name='firstName']").type("John");
-        cy.get("input[name='lastName']").type("Doe");
-        cy.get("input[name='email']").type("john.doe@email.com");
-        cy.get("input[name='creditCardNumber']").type("1111111111111111");
-        cy.get("button[type='submit']").should("be.enabled");
-        cy.get("button[type='submit']").click();
         cy.get("button[type='submit']").should("be.enabled");
         cy.get("button[type='submit']").click();
         cy.get("span").first().should("contain", "Welcome to");
@@ -108,18 +101,6 @@ describe("read bookings", () => {
         cy.get("button[aria-label='increment-Adults']").click();
         cy.get("span[aria-label='value-Adults']").should("contain", "2");
         cy.get("strong[aria-label='total-price']").should("contain", "$3,000");
-        cy.get("button[type='submit']").click();
-        cy.get("h1").first().should("contain", "Information");
-        cy.get("input[name='firstName']").should("have.value", "John");
-        cy.get("input[name='lastName']").should("have.value", "Doe");
-        cy.get("input[name='email']").should(
-          "have.value",
-          "john.doe@email.com"
-        );
-        cy.get("input[name='creditCardNumber']").should(
-          "have.value",
-          "1111111111111111"
-        );
         cy.get("button[type='submit']").click();
         cy.get("div[aria-label='Room details']").should("contain", "2 1 0");
         cy.get("div[aria-label='Total price']").should("contain", "$3,000");

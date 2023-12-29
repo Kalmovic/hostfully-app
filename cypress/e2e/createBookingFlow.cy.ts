@@ -56,32 +56,10 @@ describe("booking flow", () => {
         cy.get("div[aria-label='Monday, January 22, 2024']").click();
         cy.get("button[type='submit']").should("be.enabled");
         cy.get("button[type='submit']").click();
-        cy.get("h1").first().should("contain", "Information");
       });
       it("it should be able to click 'Cancel' and close the dialog", () => {
         cy.get("h1").first().should("contain", "Details and Availability");
         cy.get("button[aria-label='cancel-button']").click();
-      });
-      describe("User info form", () => {
-        beforeEach(() => {
-          cy.visit("http://localhost:5173/");
-          cy.get("button[aria-label='explore']").click();
-          cy.get("button[aria-haspopup='dialog']").first().click();
-          cy.get("h1").first().should("contain", "Details and Availability");
-          cy.get("div[aria-label='Monday, January 15, 2024']").click();
-          cy.get("div[aria-label='Monday, January 22, 2024']").click();
-          cy.get("button[type='submit']").should("be.enabled");
-          cy.get("button[type='submit']").click();
-          cy.get("h1").first().should("contain", "Information");
-        });
-        it("should be able to change the inputs on the user info form", () => {
-          cy.get("input[name='firstName']").type("John");
-          cy.get("input[name='lastName']").type("Doe");
-          cy.get("input[name='email']").type("john.doe@email.com");
-          cy.get("input[name='creditCardNumber']").type("1111111111111111");
-          cy.get("button[type='submit']").should("be.enabled");
-          cy.get("button[type='submit']").click();
-        });
       });
       describe("Review", () => {
         beforeEach(() => {
@@ -93,11 +71,6 @@ describe("booking flow", () => {
           cy.get("div[aria-label='Monday, January 22, 2024']").click();
           cy.get("button[type='submit']").should("be.enabled");
           cy.get("button[type='submit']").click();
-          cy.get("h1").first().should("contain", "Information");
-          cy.get("input[name='firstName']").type("John");
-          cy.get("input[name='lastName']").type("Doe");
-          cy.get("input[name='email']").type("john.doe@email.com");
-          cy.get("input[name='creditCardNumber']").type("1111111111111111");
           cy.get("button[type='submit']").should("be.enabled");
           cy.get("button[type='submit']").click();
         });
@@ -132,13 +105,6 @@ describe("booked dates in hotel calendar", () => {
     cy.get("h1").first().should("contain", "Details and Availability");
     cy.get("div[aria-label='Monday, January 15, 2024']").click();
     cy.get("div[aria-label='Monday, January 22, 2024']").click();
-    cy.get("button[type='submit']").should("be.enabled");
-    cy.get("button[type='submit']").click();
-    cy.get("h1").first().should("contain", "Information");
-    cy.get("input[name='firstName']").type("John");
-    cy.get("input[name='lastName']").type("Doe");
-    cy.get("input[name='email']").type("john.doe@email.com");
-    cy.get("input[name='creditCardNumber']").type("1111111111111111");
     cy.get("button[type='submit']").should("be.enabled");
     cy.get("button[type='submit']").click();
     cy.get("button[type='submit']").should("be.enabled");

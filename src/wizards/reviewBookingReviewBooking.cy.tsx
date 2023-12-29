@@ -14,10 +14,6 @@ describe("<ReviewBooking />", () => {
             onSubmit={() => {}}
             cancelButton={<Button variant="secondary">Cancel</Button>}
             data={{
-              creditCardNumber: "1234123412341234",
-              email: "test@email.com",
-              firstName: "Test",
-              lastName: "Test",
               endDate: "2021-10-10",
               startDate: "2021-10-10",
               numberOfAdults: 1,

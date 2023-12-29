@@ -12,10 +12,6 @@ type Booking = {
   numberOfAdults: number;
   numberOfChildren: number;
   numberOfRooms: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  creditCardNumber: string;
   status: "Active" | "Cancelled";
   totalPrice: number;
   defaultPrice: number;

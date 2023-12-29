@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { DateSelection } from "./dateSelection";
 import { ReviewBooking } from "./reviewBooking";
-import { UserInfo } from "./userInfo";
 import { useHotelStore } from "../providers/hotelsProvider";
 import { useBookingStore } from "../providers/bookingsProvider";
 import { formatToDollar } from "../utils/formatCurrency";
@@ -12,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 enum BookingSteps {
   DATE_SELECTION = "DATE_SELECTION",
-  USER_INFO = "USER_INFO",
   ROOM_DETAILS = "ROOM_DETAILS",
   REVIEW_BOOKING = "REVIEW_BOOKING",
 }
@@ -29,39 +27,19 @@ type DateSelectionData = {
   };
 };
 
-type UserInfoData = {
-  kind: BookingSteps.USER_INFO;
-  data: {
-    startDate: string;
-    endDate: string;
-    totalPrice: number;
-    numberOfAdults: number;
-    numberOfChildren: number;
-    numberOfRooms: number;
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    creditCardNumber?: string;
-  };
-};
-
 type ReviewBookingData = {
   kind: BookingSteps.REVIEW_BOOKING;
   data: {
     startDate: string;
     endDate: string;
     totalPrice: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    creditCardNumber: string;
     numberOfChildren: number;
     numberOfAdults: number;
     numberOfRooms: number;
   };
 };
 
-type WizardState = DateSelectionData | UserInfoData | ReviewBookingData;
+type WizardState = DateSelectionData | ReviewBookingData;
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -105,10 +83,6 @@ type BookingWizardProps =
         numberOfAdults: number;
         numberOfChildren: number;
         numberOfRooms: number;
-        firstName: string;
-        lastName: string;
-        email: string;
-        creditCardNumber: string;
       };
     };
 
@@ -162,14 +136,7 @@ export function BookingWizard({
     });
   };
 
-  const onDateSelectionSubmit = (data: UserInfoData["data"]) => {
-    setWizardState({
-      kind: BookingSteps.USER_INFO,
-      data,
-    });
-  };
-
-  const onUserInfoFormSubmit = (data: ReviewBookingData["data"]) => {
+  const onDateSelectionSubmit = (data: ReviewBookingData["data"]) => {
     setWizardState({
       kind: BookingSteps.REVIEW_BOOKING,
       data,
@@ -250,27 +217,6 @@ export function BookingWizard({
               defaultPrice={hotelDefaultPrice}
             />
           )}
-        </Wrapper>
-      );
-    case BookingSteps.USER_INFO:
-      return (
-        <Wrapper>
-          <UserInfo
-            data={wizardState.data}
-            cancelButton={
-              <DialogClose>
-                <Button variant="secondary" aria-label="cancel-button">
-                  Cancel
-                </Button>
-              </DialogClose>
-            }
-            onSubmit={(data) =>
-              onUserInfoFormSubmit({
-                ...wizardState.data,
-                ...data,
-              })
-            }
-          />
         </Wrapper>
       );
     case BookingSteps.REVIEW_BOOKING:

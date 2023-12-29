@@ -110,10 +110,6 @@ export const EditBookigDialog = ({
             numberOfAdults: booking.numberOfAdults,
             numberOfChildren: booking.numberOfChildren,
             numberOfRooms: booking.numberOfRooms,
-            firstName: booking.firstName,
-            lastName: booking.lastName,
-            email: booking.email,
-            creditCardNumber: booking.creditCardNumber,
           }}
         />
       }

@@ -19,10 +19,6 @@ type ReviewBookingData = {
     startDate: string;
     endDate: string;
     totalPrice: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    creditCardNumber: string;
     numberOfChildren: number;
     numberOfAdults: number;
     numberOfRooms: number;

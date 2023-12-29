@@ -5,6 +5,9 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "../providers/theme";
 
 describe("<BookCalendar />", () => {
+  beforeEach(() => {
+    cy.viewport("macbook-16");
+  });
   it("renders empty", () => {
     mount(
       <Theme>
@@ -22,8 +25,8 @@ describe("<BookCalendar />", () => {
             defaultPrice={100}
             onChange={() => {}}
             defaultValue={{
-              start: "2023-12-28",
-              end: "2023-12-29",
+              start: "2024-12-28",
+              end: "2024-12-29",
               totalPrice: 100,
             }}
           />
@@ -39,8 +42,8 @@ describe("<BookCalendar />", () => {
             defaultPrice={100}
             onChange={() => {}}
             defaultValue={{
-              start: "2023-12-28",
-              end: "2023-12-29",
+              start: "2024-01-28",
+              end: "2024-01-29",
               totalPrice: 100,
             }}
           />
@@ -49,8 +52,8 @@ describe("<BookCalendar />", () => {
     );
     cy.get("div[data-selection-start='true']").should("contain", "28");
     cy.get("div[data-selection-end='true']").should("contain", "29");
-    cy.get("div[aria-label='Tuesday, December 26, 2023']").click();
-    cy.get("div[aria-label='Wednesday, December 27, 2023']").click();
+    cy.get("div[aria-label='Friday, January 26, 2024']").click();
+    cy.get("div[aria-label='Saturday, January 27, 2024']").click();
     cy.get("div[data-selection-start='true']").should("contain", "26");
     cy.get("div[data-selection-end='true']").should("contain", "27");
   });
@@ -61,17 +64,17 @@ describe("<BookCalendar />", () => {
           <BookCalendar
             defaultPrice={100}
             onChange={() => {}}
-            unavailableDates={[["2023-12-26", "2023-12-27"]]}
+            unavailableDates={[["2024-01-26", "2024-01-27"]]}
           />
         </ThemeProvider>
       </Theme>
     );
-    cy.get("div[aria-label='Tuesday, December 26, 2023']").should(
+    cy.get("div[aria-label='Friday, January 26, 2024']").should(
       "have.attr",
       "data-unavailable",
       "true"
     );
-    cy.get("div[aria-label='Wednesday, December 27, 2023']").should(
+    cy.get("div[aria-label='Saturday, January 27, 2024']").should(
       "have.attr",
       "data-unavailable",
       "true"
