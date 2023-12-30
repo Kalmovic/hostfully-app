@@ -197,8 +197,8 @@ export function DateSelection(props: PropsType) {
                       }}
                     />
                     <Flex gap="1" align="center">
-                      <BedDouble size="15px" color={theme.colors.black} />
-                      <Text size="2">{numberOfRooms} </Text>
+                      <Baby size="15px" color={theme.colors.black} />
+                      <Text size="2">{numberOfChildren} </Text>
                     </Flex>
                     <Separator
                       orientation="vertical"
@@ -207,8 +207,8 @@ export function DateSelection(props: PropsType) {
                       }}
                     />
                     <Flex gap="1" align="center">
-                      <Baby size="15px" color={theme.colors.black} />
-                      <Text size="2">{numberOfChildren} </Text>
+                      <BedDouble size="15px" color={theme.colors.black} />
+                      <Text size="2">{numberOfRooms} </Text>
                     </Flex>
                   </Flex>
                 </Button>

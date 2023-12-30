@@ -90,8 +90,8 @@ export function ReviewBooking({
                 }}
               />
               <Flex gap="1" align="center">
-                <BedDouble size="15px" color={theme.colors.black} />
-                <Text size="2">{data.numberOfRooms} </Text>
+                <Baby size="15px" color={theme.colors.black} />
+                <Text size="2">{data.numberOfChildren} </Text>
               </Flex>
               <Separator
                 orientation="vertical"
@@ -100,8 +100,8 @@ export function ReviewBooking({
                 }}
               />
               <Flex gap="1" align="center">
-                <Baby size="15px" color={theme.colors.black} />
-                <Text size="2">{data.numberOfChildren} </Text>
+                <BedDouble size="15px" color={theme.colors.black} />
+                <Text size="2">{data.numberOfRooms} </Text>
               </Flex>
             </Flex>
           </StyledLineInfo>

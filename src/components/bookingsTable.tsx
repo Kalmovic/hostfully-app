@@ -76,9 +76,9 @@ export function BookingsTable(props: TableProps) {
                         }}
                       />
                       <Flex gap="1" align="center">
-                        <BedDouble size="15px" color={theme.colors.black} />
-                        <Text size="2" aria-label="rooms-number">
-                          {cell.content["rooms"]}{" "}
+                        <Baby size="15px" color={theme.colors.black} />
+                        <Text size="2" aria-label="children-number">
+                          {cell.content["children"]}
                         </Text>
                       </Flex>
                       <Separator
@@ -88,9 +88,9 @@ export function BookingsTable(props: TableProps) {
                         }}
                       />
                       <Flex gap="1" align="center">
-                        <Baby size="15px" color={theme.colors.black} />
-                        <Text size="2" aria-label="children-number">
-                          {cell.content["children"]}
+                        <BedDouble size="15px" color={theme.colors.black} />
+                        <Text size="2" aria-label="rooms-number">
+                          {cell.content["rooms"]}{" "}
                         </Text>
                       </Flex>
                     </StyledBookingDetails>

@@ -158,8 +158,8 @@ export function Card(props: CardProps) {
               }}
             />
             <Flex gap="1" align="center">
-              <BedDouble size="15px" color={theme.colors.black} />
-              <Text size="2">{props.numberOfRooms} </Text>
+              <Baby size="15px" color={theme.colors.black} />
+              <Text size="2">{props.numberOfChildren}</Text>
             </Flex>
             <Separator
               orientation="vertical"
@@ -168,8 +168,8 @@ export function Card(props: CardProps) {
               }}
             />
             <Flex gap="1" align="center">
-              <Baby size="15px" color={theme.colors.black} />
-              <Text size="2">{props.numberOfChildren}</Text>
+              <BedDouble size="15px" color={theme.colors.black} />
+              <Text size="2">{props.numberOfRooms} </Text>
             </Flex>
           </StyledBookingDetails>
           <StyledButtons>{props.actionButtons}</StyledButtons>
