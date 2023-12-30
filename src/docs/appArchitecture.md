@@ -70,7 +70,7 @@ graph TD
   O --> E
   Q --> R
   R --> S
-  O -- temporarily remove booked dates from hotel ---> AAA
+  O -- visually "remove" booked dates from hotel ---> AAA
   S -- remove booked dates from hotel ---> AAA
 
   K -- edited booking successfully ---> ST

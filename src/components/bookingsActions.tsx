@@ -38,7 +38,9 @@ export const CancelBookingDialog = ({
             </Tooltip>
           </IconButton>
         ) : (
-          <Button variant="danger">Cancellation</Button>
+          <Button variant="danger" fullWidth>
+            Cancellation
+          </Button>
         )
       }
       children={
@@ -84,19 +86,10 @@ export const EditBookigDialog = ({
   bookingId: number;
 }) => {
   const bookingsById = useBookingStore((state) => state.bookingsById);
-  const updateHotelAvailableDates = useHotelStore(
-    (state) => state.updateHotelAvailableDates
-  );
   const booking = bookingsById[bookingId];
+
   return (
     <Dialog
-      onLeaveDialog={() => {
-        updateHotelAvailableDates({
-          id: booking.title,
-          bookedRangeDates: [booking.startDate, booking.endDate],
-          action: "makeRangeUnvailable",
-        });
-      }}
       children={
         <BookingWizard
           mode="edit"
@@ -121,7 +114,9 @@ export const EditBookigDialog = ({
             </Tooltip>
           </IconButton>
         ) : (
-          <Button variant="secondary">Edit</Button>
+          <Button variant="secondary" fullWidth>
+            Edit
+          </Button>
         )
       }
     />

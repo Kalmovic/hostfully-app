@@ -116,6 +116,7 @@ export function ManageBookings() {
       rowKey: "actions",
       content: (
         <ActionsButtons
+          key={booking.id}
           mode="table"
           actions={["edit", "cancel"]}
           bookingId={booking.id}

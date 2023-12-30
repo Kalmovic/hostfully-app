@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { DateSelection } from "./dateSelection";
 import { ReviewBooking } from "./reviewBooking";
 import { useHotelStore } from "../providers/hotelsProvider";
@@ -86,6 +86,14 @@ type BookingWizardProps =
       };
     };
 
+const CancelButton = () => (
+  <DialogClose>
+    <Button variant="secondary" aria-label="cancel-button">
+      Cancel
+    </Button>
+  </DialogClose>
+);
+
 export function BookingWizard({
   hotelTitle,
   hotelDefaultPrice,
@@ -105,36 +113,12 @@ export function BookingWizard({
 
   const hotel = hotels.find((hotel) => hotel.title === hotelTitle)!;
 
-  useEffect(() => {
-    if (props.mode === "edit") {
-      updateHotelAvailableDates({
-        id: hotel.title,
-        bookedRangeDates: [
-          props.defaultBookingInfo.startDate,
-          props.defaultBookingInfo.endDate,
-        ],
-        action: "makeRangeAvailable",
-      });
-    }
-  }, [
-    props.mode,
-    hotel.title,
-    props.defaultBookingInfo?.startDate,
-    props.defaultBookingInfo?.endDate,
-    updateHotelAvailableDates,
-  ]);
-
-  const onUpdateCancel = () => {
-    if (props.mode === "create") return; // required for type safety
-    updateHotelAvailableDates({
-      id: hotel.title,
-      bookedRangeDates: [
-        props.defaultBookingInfo.startDate,
-        props.defaultBookingInfo.endDate,
-      ],
-      action: "makeRangeUnvailable",
-    });
-  };
+  const unavailableDates =
+    props.mode === "edit"
+      ? hotel.unavailableDates.filter(
+          (date) => date[0] === props.defaultBookingInfo.startDate[0]
+        )
+      : hotel.unavailableDates;
 
   const onDateSelectionSubmit = (data: ReviewBookingData["data"]) => {
     setWizardState({
@@ -185,28 +169,16 @@ export function BookingWizard({
             <DateSelection
               mode={props.mode}
               data={props.defaultBookingInfo}
-              cancelButton={
-                <DialogClose onClick={() => onUpdateCancel()}>
-                  <Button variant="secondary" aria-label="cancel-button">
-                    Cancel
-                  </Button>
-                </DialogClose>
-              }
+              cancelButton={<CancelButton />}
               onSubmit={onDateSelectionSubmit}
-              unavailableDates={hotel.unavailableDates}
+              unavailableDates={unavailableDates}
               defaultPrice={hotelDefaultPrice}
             />
           ) : (
             <DateSelection
               mode={props.mode}
               data={wizardState.data}
-              cancelButton={
-                <DialogClose>
-                  <Button variant="secondary" aria-label="cancel-button">
-                    Cancel
-                  </Button>
-                </DialogClose>
-              }
+              cancelButton={<CancelButton />}
               onSubmit={(data) =>
                 onDateSelectionSubmit({
                   ...wizardState.data,
@@ -224,17 +196,7 @@ export function BookingWizard({
         <Wrapper>
           <ReviewBooking
             data={wizardState.data}
-            cancelButton={
-              <DialogClose
-                onClick={() =>
-                  props.mode === "edit" ? onUpdateCancel() : null
-                }
-              >
-                <Button variant="secondary" aria-label="cancel-button">
-                  Cancel
-                </Button>
-              </DialogClose>
-            }
+            cancelButton={<CancelButton />}
             onSubmit={() => onReviewBookingSubmit(wizardState.data)}
           />
         </Wrapper>
