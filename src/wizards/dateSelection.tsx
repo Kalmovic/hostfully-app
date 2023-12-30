@@ -160,12 +160,12 @@ export function DateSelection(props: PropsType) {
         gap: "0.5rem",
       }}
     >
-      <DialogTitle>Details and Availability</DialogTitle>
-      <DialogDescription size="2" mb="4">
+      <DialogTitle mb="2">Details and Availability</DialogTitle>
+      <DialogDescription size="2" mb="2">
         Select the number of adults, children, room and the dates you want to
         book and check the availability.
       </DialogDescription>
-      <Flex direction="column" gap="6" width="100%">
+      <Flex direction="column" gap="4" width="100%">
         {isMobile ? (
           <Popover
             trigger={

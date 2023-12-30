@@ -6,6 +6,7 @@ import {
   DialogTrigger,
   DialogContent,
   Theme,
+  Separator,
 } from "@radix-ui/themes";
 
 const StyledDialogRoot = styled(DialogRoot)({
@@ -59,7 +60,17 @@ export function Dialog(props: {
             borderTopRightRadius: "10px",
           }}
         >
-          <Theme>{props.children}</Theme>
+          <Theme>
+            <Separator
+              style={{
+                margin: "0 auto 1rem",
+                borderRadius: "10px",
+                height: 5,
+                width: "80px",
+              }}
+            />
+            {props.children}
+          </Theme>
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
