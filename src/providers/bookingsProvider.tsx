@@ -110,23 +110,20 @@ export const useBookingStore = create<BookingStore>()((set) => ({
   },
   restoreBooking: (id) => {
     set((state) => {
-      const updatedBooking = {
+      const restoredBooking = {
         ...state.bookingsById[id],
         status: "Active",
       } as Booking;
       return {
         bookings: state.bookings.map((b) => {
           if (b.id === id) {
-            return updatedBooking;
+            return restoredBooking;
           }
           return b;
         }),
         bookingsById: {
           ...state.bookingsById,
-          [id]: {
-            ...state.bookingsById[id],
-            status: "Active",
-          },
+          [id]: restoredBooking,
         },
       };
     });
