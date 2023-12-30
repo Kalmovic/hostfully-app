@@ -4,10 +4,10 @@ import { ReviewBooking } from "./reviewBooking";
 import { useHotelStore } from "../providers/hotelsProvider";
 import { useBookingStore } from "../providers/bookingsProvider";
 import { formatToDollar } from "../utils/formatCurrency";
-import { DialogClose } from "@radix-ui/themes";
+import { DialogClose, Flex, Text } from "@radix-ui/themes";
 import { Button } from "../components/button";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 enum BookingSteps {
   DATE_SELECTION = "DATE_SELECTION",
@@ -159,7 +159,45 @@ export function BookingWizard({
         title: hotel.title,
         status: "Active",
       });
-      toast.success("Booking updated successfully!");
+      toast.success("Booking updated successfully!", {
+        description: (
+          <Flex direction={"column"}>
+            <Text>
+              <strong>{hotel.title}</strong>
+              <span>
+                {" "}
+                from {format(
+                  new Date(bookingInfo.startDate),
+                  "MM/dd/YYY"
+                )} to {format(new Date(bookingInfo.endDate), "MM/dd/YYY")}
+              </span>
+            </Text>
+            {props.defaultBookingInfo.numberOfAdults !==
+              bookingInfo.numberOfAdults && (
+              <Text>
+                <strong>Adults:</strong>{" "}
+                {props.defaultBookingInfo.numberOfAdults} →{" "}
+                {bookingInfo.numberOfAdults}
+              </Text>
+            )}
+            {props.defaultBookingInfo.numberOfChildren !==
+              bookingInfo.numberOfChildren && (
+              <Text>
+                <strong>Children:</strong>{" "}
+                {props.defaultBookingInfo.numberOfChildren} →{" "}
+                {bookingInfo.numberOfChildren}
+              </Text>
+            )}
+            {props.defaultBookingInfo.numberOfRooms !==
+              bookingInfo.numberOfRooms && (
+              <Text>
+                <strong>Rooms:</strong> {props.defaultBookingInfo.numberOfRooms}{" "}
+                → {bookingInfo.numberOfRooms}
+              </Text>
+            )}
+          </Flex>
+        ),
+      });
     } else {
       updateHotelAvailableDates({
         id: hotel.title,

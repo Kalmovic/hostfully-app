@@ -11,9 +11,10 @@ import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import { Dialog } from "./dialog";
 import styled from "styled-components";
 import { Button } from "./button";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useBookingStore } from "../providers/bookingsProvider";
 import { useHotelStore } from "../providers/hotelsProvider";
+import { formatToDollar } from "../utils/formatCurrency";
 
 export const CancelBookingDialog = ({
   mode = "cards",
@@ -23,6 +24,7 @@ export const CancelBookingDialog = ({
   bookingId: number;
 }) => {
   const deleteBooking = useBookingStore((state) => state.deleteBooking);
+  const restoreBooking = useBookingStore((state) => state.restoreBooking);
   const updateHotelAvailableDates = useHotelStore(
     (state) => state.updateHotelAvailableDates
   );
@@ -65,7 +67,26 @@ export const CancelBookingDialog = ({
                     bookedRangeDates: [booking.startDate, booking.endDate],
                     action: "makeRangeAvailable",
                   });
-                  toast.success("Booking cancelled successfully!");
+                  toast.info("Booking has been cancelled", {
+                    description: `You'll receive the refund in the value of ${formatToDollar.format(
+                      booking.totalPrice
+                    )} next week`,
+                    action: {
+                      label: "Undo",
+                      onClick: () => {
+                        restoreBooking(bookingId);
+                        updateHotelAvailableDates({
+                          id: booking.title,
+                          bookedRangeDates: [
+                            booking.startDate,
+                            booking.endDate,
+                          ],
+                          action: "makeRangeUnvailable",
+                        });
+                        toast.success("Booking has been restored");
+                      },
+                    },
+                  });
                 }}
               >
                 Yes, cancel booking

@@ -23,6 +23,7 @@ type BookingStore = {
   addBooking: (booking: Booking) => void;
   deleteBooking: (id: number) => void;
   updateBooking: (id: number, booking: Booking) => void;
+  restoreBooking: (id: number) => void;
 };
 
 const initialState = {
@@ -78,17 +79,56 @@ export const useBookingStore = create<BookingStore>()((set) => ({
     });
   },
   updateBooking: (id, booking) => {
-    set((state) => ({
-      bookings: state.bookings.map((b) => {
-        if (b.id === id) {
-          return booking;
-        }
-        return b;
-      }),
-      bookingsById: {
-        ...state.bookingsById,
-        [id]: booking,
-      },
-    }));
+    set((state) => {
+      const updatedBooking = {
+        ...state.bookingsById[id],
+        ...booking,
+      } as Booking;
+
+      const bookings = state.bookings;
+
+      const updatedBookingIndex = bookings.findIndex(
+        (booking) => booking.id === id
+      );
+      if (updatedBookingIndex !== -1) {
+        bookings.splice(updatedBookingIndex, 1, updatedBooking);
+      } else {
+        bookings.push(updatedBooking);
+      }
+
+      const updatedBookings =
+        state.bookings.length === 1 ? [updatedBooking] : bookings;
+
+      return {
+        bookings: updatedBookings,
+        bookingsById: {
+          ...state.bookingsById,
+          [id]: updatedBooking,
+        },
+      };
+    });
+  },
+  restoreBooking: (id) => {
+    set((state) => {
+      const updatedBooking = {
+        ...state.bookingsById[id],
+        status: "Active",
+      } as Booking;
+      return {
+        bookings: state.bookings.map((b) => {
+          if (b.id === id) {
+            return updatedBooking;
+          }
+          return b;
+        }),
+        bookingsById: {
+          ...state.bookingsById,
+          [id]: {
+            ...state.bookingsById[id],
+            status: "Active",
+          },
+        },
+      };
+    });
   },
 }));
