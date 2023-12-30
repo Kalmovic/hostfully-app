@@ -116,7 +116,7 @@ export function BookingWizard({
   const unavailableDates =
     props.mode === "edit"
       ? hotel.unavailableDates.filter(
-          (date) => date[0] === props.defaultBookingInfo.startDate[0]
+          (date) => date[0] !== props.defaultBookingInfo.startDate
         )
       : hotel.unavailableDates;
 
@@ -127,12 +127,27 @@ export function BookingWizard({
     });
   };
 
-  const onReviewBookingSubmit = (bookingInfo: ReviewBookingData["data"]) => {
-    updateHotelAvailableDates({
-      id: hotel.title,
-      bookedRangeDates: [bookingInfo.startDate, bookingInfo.endDate],
-    });
+  const onReviewBookingSubmit = async (
+    bookingInfo: ReviewBookingData["data"]
+  ) => {
     if (props.mode === "edit") {
+      if (
+        props.defaultBookingInfo.startDate !== bookingInfo.startDate ||
+        props.defaultBookingInfo.endDate !== bookingInfo.endDate
+      ) {
+        await updateHotelAvailableDates({
+          id: hotel.title,
+          bookedRangeDates: [
+            props.defaultBookingInfo.startDate,
+            props.defaultBookingInfo.endDate,
+          ],
+          action: "makeRangeAvailable",
+        });
+        updateHotelAvailableDates({
+          id: hotel.title,
+          bookedRangeDates: [bookingInfo.startDate, bookingInfo.endDate],
+        });
+      }
       updateBooking(props.bookingId, {
         ...bookingInfo,
         description: hotel.description,
@@ -146,6 +161,10 @@ export function BookingWizard({
       });
       toast.success("Booking updated successfully!");
     } else {
+      updateHotelAvailableDates({
+        id: hotel.title,
+        bookedRangeDates: [bookingInfo.startDate, bookingInfo.endDate],
+      });
       addBooking({
         description: hotel.description,
         id: hotel.id,
