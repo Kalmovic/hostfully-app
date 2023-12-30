@@ -44,7 +44,7 @@ export function BookCalendar({
   defaultPrice,
   defaultValue,
 }: BookCalenderProps) {
-  const isMobile = window.innerWidth <= 767;
+  const isMobile = window.innerWidth <= 591;
   const [calendarInfo, setCalendarInfo] = React.useState({
     start: defaultValue?.start || "",
     end: defaultValue?.end || "",

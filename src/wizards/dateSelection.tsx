@@ -1,13 +1,22 @@
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from "react-hook-form";
+import { Control, Controller, useForm } from "react-hook-form";
 
-import { DialogTitle, DialogDescription, Flex, Text } from "@radix-ui/themes";
+import {
+  DialogTitle,
+  DialogDescription,
+  Flex,
+  Text,
+  Separator,
+} from "@radix-ui/themes";
 import { BookCalendar } from "../components/calendar";
 import { Button } from "../components/button";
 import { ManualInput } from "../components/manualInput";
 import styled from "styled-components";
 import { formatToDollar } from "../utils/formatCurrency";
+import { Popover } from "../components/popover";
+import { theme } from "../providers/theme";
+import { Baby, BedDouble, Users } from "lucide-react";
 
 type DateSelectionForm = {
   startDate: string;
@@ -63,6 +72,61 @@ const schema = () =>
     numberOfRooms: yup.number().required().min(1),
   });
 
+const BookingDetails = (props: {
+  control: Control<DateSelectionForm, unknown>;
+  data: {
+    numberOfAdults: number;
+    numberOfChildren: number;
+    numberOfRooms: number;
+  };
+}) => {
+  return (
+    <StyledBookingDetailsWrapper>
+      <Controller
+        control={props.control}
+        name="numberOfAdults"
+        render={({ field }) => (
+          <ManualInput
+            label="Adults"
+            initialValue={`${props.data.numberOfAdults || 1}`}
+            minimumValue="1"
+            onChange={(value) => {
+              field.onChange(value);
+            }}
+          />
+        )}
+      />
+      <Controller
+        control={props.control}
+        name="numberOfChildren"
+        render={({ field }) => (
+          <ManualInput
+            label="Children"
+            initialValue={`${props.data.numberOfChildren || 0}`}
+            onChange={(value) => {
+              field.onChange(value);
+            }}
+          />
+        )}
+      />
+      <Controller
+        control={props.control}
+        name="numberOfRooms"
+        render={({ field }) => (
+          <ManualInput
+            label="Rooms"
+            initialValue={`${props.data.numberOfRooms || 1}`}
+            minimumValue="1"
+            onChange={(value) => {
+              field.onChange(value);
+            }}
+          />
+        )}
+      />
+    </StyledBookingDetailsWrapper>
+  );
+};
+
 export function DateSelection(props: PropsType) {
   const validationSchema = schema();
 
@@ -85,58 +149,103 @@ export function DateSelection(props: PropsType) {
   const numberOfAdults = watch("numberOfAdults");
   const numberOfChildren = watch("numberOfChildren");
   const numberOfRooms = watch("numberOfRooms");
+  const isMobile = window.innerWidth <= 591;
 
   return (
-    <form onSubmit={handleSubmit(props.onSubmit)}>
+    <form
+      onSubmit={handleSubmit(props.onSubmit)}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "0.5rem",
+      }}
+    >
       <DialogTitle>Details and Availability</DialogTitle>
       <DialogDescription size="2" mb="4">
         Select the number of adults, children, room and the dates you want to
         book and check the availability.
       </DialogDescription>
-      <Flex direction="column" gap="3" width="100%">
-        <StyledBookingDetailsWrapper>
-          <Controller
+      <Flex direction="column" gap="6" width="100%">
+        {isMobile ? (
+          <Popover
+            trigger={
+              <StyledLineInfo aria-label="Room details">
+                <Text size="2">Change room details: </Text>
+                <Button
+                  variant="secondary"
+                  type="button"
+                  style={{
+                    padding: "1.2rem",
+                  }}
+                  autoFocus
+                >
+                  <Flex
+                    gap="2"
+                    align="center"
+                    style={{
+                      padding: "0.25rem 0.5rem",
+                    }}
+                  >
+                    <Flex gap="1" align="center">
+                      <Users size="15px" color={theme.colors.black} />
+                      <Text size="2">{numberOfAdults} </Text>
+                    </Flex>
+                    <Separator
+                      orientation="vertical"
+                      style={{
+                        backgroundColor: theme.colors.black,
+                      }}
+                    />
+                    <Flex gap="1" align="center">
+                      <BedDouble size="15px" color={theme.colors.black} />
+                      <Text size="2">{numberOfRooms} </Text>
+                    </Flex>
+                    <Separator
+                      orientation="vertical"
+                      style={{
+                        backgroundColor: theme.colors.black,
+                      }}
+                    />
+                    <Flex gap="1" align="center">
+                      <Baby size="15px" color={theme.colors.black} />
+                      <Text size="2">{numberOfChildren} </Text>
+                    </Flex>
+                  </Flex>
+                </Button>
+              </StyledLineInfo>
+            }
+          >
+            <Text size="4" weight="bold">
+              Room details:
+            </Text>
+            <Separator
+              style={{
+                backgroundColor: theme.colors.lightGray,
+                marginTop: 8,
+                marginBottom: 8,
+                width: "100%",
+                height: 0.5,
+              }}
+            />
+            <BookingDetails
+              control={control}
+              data={{
+                numberOfAdults: numberOfAdults,
+                numberOfChildren: numberOfChildren,
+                numberOfRooms: numberOfRooms,
+              }}
+            />
+          </Popover>
+        ) : (
+          <BookingDetails
             control={control}
-            name="numberOfAdults"
-            render={({ field }) => (
-              <ManualInput
-                label="Adults"
-                initialValue={`${props.data.numberOfAdults || 1}`}
-                minimumValue="1"
-                onChange={(value) => {
-                  field.onChange(value);
-                }}
-              />
-            )}
+            data={{
+              numberOfAdults: numberOfAdults,
+              numberOfChildren: numberOfChildren,
+              numberOfRooms: numberOfRooms,
+            }}
           />
-          <Controller
-            control={control}
-            name="numberOfChildren"
-            render={({ field }) => (
-              <ManualInput
-                label="Children"
-                initialValue={`${props.data.numberOfChildren || 0}`}
-                onChange={(value) => {
-                  field.onChange(value);
-                }}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="numberOfRooms"
-            render={({ field }) => (
-              <ManualInput
-                label="Rooms"
-                initialValue={`${props.data.numberOfRooms || 1}`}
-                minimumValue="1"
-                onChange={(value) => {
-                  field.onChange(value);
-                }}
-              />
-            )}
-          />
-        </StyledBookingDetailsWrapper>
+        )}
         <BookCalendar
           numberOfAdults={numberOfAdults}
           numberOfChildren={numberOfChildren}
@@ -156,29 +265,29 @@ export function DateSelection(props: PropsType) {
             });
           }}
         />
-        <Flex justify="between" align="center">
-          <Text color="red">{formState.errors.endDate?.message}</Text>
-          <Text align="right">
-            Total price:{" "}
-            <strong aria-label="total-price">
-              {formatToDollar.format(watch("totalPrice") || 0)}
-            </strong>
-          </Text>
-        </Flex>
-        <StyledFooterWrapper>
-          <StyledButtonsGrid>
-            {props.cancelButton}
-            <Button
-              fullWidth
-              disabled={!formState.isValid}
-              variant="primary"
-              type="submit"
-            >
-              Continue
-            </Button>
-          </StyledButtonsGrid>
-        </StyledFooterWrapper>
       </Flex>
+      <Flex justify="between" align="center">
+        <Text color="red">{formState.errors.endDate?.message}</Text>
+        <Text align="right">
+          Total price:{" "}
+          <strong aria-label="total-price">
+            {formatToDollar.format(watch("totalPrice") || 0)}
+          </strong>
+        </Text>
+      </Flex>
+      <StyledFooterWrapper>
+        <StyledButtonsGrid>
+          {props.cancelButton}
+          <Button
+            fullWidth
+            disabled={!formState.isValid}
+            variant="primary"
+            type="submit"
+          >
+            Continue
+          </Button>
+        </StyledButtonsGrid>
+      </StyledFooterWrapper>
     </form>
   );
 }
@@ -210,9 +319,20 @@ const StyledBookingDetailsWrapper = styled(Flex)({
     border: "none",
     alignItems: "end",
     justifyContent: "flex-end",
+    width: "fit-content",
     flexDirection: "column",
-    gap: "0.5rem",
+    gap: "1.4rem",
     padding: "0.25rem 0.25rem",
-    marginBottom: 12,
+    marginTop: 12,
   },
+});
+
+const StyledLineInfo = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  backgroundColor: theme.colors.primaryLight,
+  padding: "0.1rem 0.1rem 0.1rem 0.5rem",
+  borderRadius: "0.5rem",
+  gap: "1",
 });
