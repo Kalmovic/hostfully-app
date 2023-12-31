@@ -1,11 +1,22 @@
 import { BookingsTable } from "../components/bookingsTable";
 import styled from "styled-components";
-import { Box, Flex, IconButton, Text, Tooltip } from "@radix-ui/themes";
+import {
+  Box,
+  Flex,
+  IconButton,
+  Text,
+  TextField,
+  Tooltip,
+} from "@radix-ui/themes";
 import { useBookingStore } from "../providers/bookingsProvider";
 import { Info } from "lucide-react";
 import { ActionsButtons } from "../components/bookingsActions";
 import { unformatFromDollar } from "../utils/formatCurrency";
-import { CardStackIcon, TableIcon } from "@radix-ui/react-icons";
+import {
+  CardStackIcon,
+  MagnifyingGlassIcon,
+  TableIcon,
+} from "@radix-ui/react-icons";
 import React from "react";
 import { Card } from "../components/card";
 
@@ -83,8 +94,18 @@ export type RowsType = RowKind[];
 
 export function ManageBookings() {
   const bookings = useBookingStore((state) => state.bookings);
-  const bookingsIds = bookings.map((booking) => booking.id);
-  const rows: RowsType[] = bookings.map((booking) => [
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const isMobile = window.innerWidth <= 767;
+  const [renderMode, setRenderMode] = React.useState<"table" | "cards">(
+    isMobile ? "cards" : "table"
+  );
+  const filteredBookings = bookings.filter(
+    (booking) =>
+      booking.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      booking.status.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const bookingsIds = filteredBookings.map((booking) => booking.id);
+  const rows: RowsType[] = filteredBookings.map((booking) => [
     {
       rowKey: "title",
       content: booking.title,
@@ -140,36 +161,84 @@ export function ManageBookings() {
           >
             Manage your bookings
           </Text>
+          <Flex
+            justify="between"
+            align="center"
+            style={{
+              marginBottom: 16,
+              padding: 0,
+            }}
+          >
+            <Tooltip
+              content={`Change to ${
+                renderMode === "table" ? "cards" : "table"
+              }`}
+            >
+              <StyledIconButton
+                variant="soft"
+                color="indigo"
+                aria-label="change-view-mode"
+                style={{
+                  margin: 0,
+                }}
+                onClick={() =>
+                  renderMode === "table"
+                    ? setRenderMode("cards")
+                    : setRenderMode("table")
+                }
+              >
+                {renderMode === "table" ? <TableIcon /> : <CardStackIcon />}
+              </StyledIconButton>
+            </Tooltip>
+            <SearchBookings
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
+          </Flex>
           <Flex gap="4">
-            <Box
-              width="100%"
-              display={{
-                initial: "none",
-                sm: "block",
-              }}
-            >
-              <BookingsTable
-                actions={["edit", "cancel"]}
-                headers={[
-                  "Hotel Name",
-                  "Period",
-                  "Details",
-                  "Price",
-                  "Status",
-                  "Actions",
-                ]}
-                rows={rows}
-                bookingsIds={bookingsIds}
-              />
-            </Box>
-            <Box
-              width="100%"
-              display={{
-                initial: "block",
-                sm: "none",
-              }}
-            >
-              <MultipleViewsBookings rows={rows} bookingsIds={bookingsIds} />
+            <Box width="100%">
+              {renderMode === "table" ? (
+                <BookingsTable
+                  actions={["edit", "cancel"]}
+                  headers={[
+                    "Hotel Name",
+                    "Period",
+                    "Details",
+                    "Price",
+                    "Status",
+                    "Actions",
+                  ]}
+                  rows={rows}
+                  bookingsIds={bookingsIds}
+                />
+              ) : (
+                <BookingCardList>
+                  {filteredBookings.map((booking) => (
+                    <Card
+                      key={booking.id}
+                      mode="manage"
+                      hotelName={booking.title}
+                      bookPrice={unformatFromDollar(booking.price)}
+                      bookStatus={booking.status}
+                      startDate={booking.startDate}
+                      hotelDescription={booking.description}
+                      endDate={booking.endDate}
+                      numberOfAdults={booking.numberOfAdults}
+                      numberOfChildren={booking.numberOfChildren}
+                      numberOfRooms={booking.numberOfRooms}
+                      img={booking.image}
+                      actionButtons={[
+                        <ActionsButtons
+                          key={booking.id}
+                          mode="cards"
+                          actions={["edit", "cancel"]}
+                          bookingId={booking.id}
+                        />,
+                      ]}
+                    />
+                  ))}
+                </BookingCardList>
+              )}
             </Box>
           </Flex>
         </>
@@ -200,78 +269,27 @@ const StyledIconButton = styled(IconButton)({
   },
 });
 
-const MultipleViewsBookings = ({
-  rows,
-  bookingsIds,
+const SearchBookings = ({
+  searchQuery,
+  setSearchQuery,
 }: {
-  rows: RowsType[];
-  bookingsIds: number[];
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const isMobile = window.innerWidth <= 767;
-  const bookings = useBookingStore((state) => state.bookings);
-  const [renderMode, setRenderMode] = React.useState<"table" | "cards">(
-    isMobile ? "cards" : "table"
-  );
   return (
-    <>
-      <Tooltip
-        content={`Change to ${renderMode === "table" ? "cards" : "table"}`}
-      >
-        <StyledIconButton
-          variant="soft"
-          color="indigo"
-          aria-label="change-view-mode"
-          onClick={() =>
-            renderMode === "table"
-              ? setRenderMode("cards")
-              : setRenderMode("table")
-          }
-        >
-          {renderMode === "table" ? <TableIcon /> : <CardStackIcon />}
-        </StyledIconButton>
-      </Tooltip>
-      {renderMode === "table" ? (
-        <BookingsTable
-          actions={["edit", "cancel"]}
-          headers={[
-            "Hotel Name",
-            "Period",
-            "Details",
-            "Price",
-            "Status",
-            "Actions",
-          ]}
-          rows={rows}
-          bookingsIds={bookingsIds}
-        />
-      ) : (
-        <BookingCardList>
-          {bookings.map((booking) => (
-            <Card
-              key={booking.id}
-              mode="manage"
-              hotelName={booking.title}
-              bookPrice={unformatFromDollar(booking.price)}
-              bookStatus={booking.status}
-              startDate={booking.startDate}
-              hotelDescription={booking.description}
-              endDate={booking.endDate}
-              numberOfAdults={booking.numberOfAdults}
-              numberOfChildren={booking.numberOfChildren}
-              numberOfRooms={booking.numberOfRooms}
-              img={booking.image}
-              actionButtons={[
-                <ActionsButtons
-                  key={booking.id}
-                  mode="cards"
-                  actions={["edit", "cancel"]}
-                  bookingId={booking.id}
-                />,
-              ]}
-            />
-          ))}
-        </BookingCardList>
-      )}
-    </>
+    <TextField.Root
+      style={{
+        marginLeft: "auto",
+      }}
+    >
+      <TextField.Slot>
+        <MagnifyingGlassIcon height="16" width="16" />
+      </TextField.Slot>
+      <TextField.Input
+        placeholder="Search bookings"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+    </TextField.Root>
   );
 };
