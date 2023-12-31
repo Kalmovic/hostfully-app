@@ -7,6 +7,7 @@ import { Button } from "./button";
 
 describe("<Dialog />", () => {
   it("opens and closes dialog", () => {
+    cy.viewport("macbook-16");
     mount(
       <Theme>
         <ThemeProvider theme={theme}>

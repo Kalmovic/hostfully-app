@@ -39,16 +39,16 @@ describe("booking flow", () => {
         cy.get("div[aria-label='Monday, January 15, 2024']").click();
         cy.get("div[aria-label='Monday, January 22, 2024']").click();
         cy.get("button[type='submit']").should("be.enabled");
-        cy.get("strong[aria-label='total-price']").should("contain", "$8,000");
+        cy.get("strong[aria-label='total-price']").should("contain", "$4,000");
       });
       it("it should be able to update the price when the number of adults changes", () => {
         cy.get("h1").first().should("contain", "Details and Availability");
         cy.get("div[aria-label='Monday, January 15, 2024']").click();
         cy.get("div[aria-label='Monday, January 22, 2024']").click();
         cy.get("button[type='submit']").should("be.enabled");
-        cy.get("strong[aria-label='total-price']").should("contain", "$8,000");
+        cy.get("strong[aria-label='total-price']").should("contain", "$4,000");
         cy.get("button[aria-label='increment-Adults']").click();
-        cy.get("strong[aria-label='total-price']").should("contain", "$12,000");
+        cy.get("strong[aria-label='total-price']").should("contain", "$8,000");
       });
       it("it should be able to click 'Continue' after selecting the dates", () => {
         cy.get("h1").first().should("contain", "Details and Availability");
@@ -71,8 +71,6 @@ describe("booking flow", () => {
           cy.get("div[aria-label='Monday, January 22, 2024']").click();
           cy.get("button[type='submit']").should("be.enabled");
           cy.get("button[type='submit']").click();
-          cy.get("button[type='submit']").should("be.enabled");
-          cy.get("button[type='submit']").click();
         });
         it("should be able to see the review page", () => {
           cy.get("h1").first().should("contain", "Review");
@@ -80,14 +78,14 @@ describe("booking flow", () => {
             "contain",
             "01/15/2024 to 01/22/2024"
           );
-          cy.get("div[aria-label='Room details']").should("contain", "1 1 0");
-          cy.get("div[aria-label='Total price']").should("contain", "$8,000");
+          cy.get("div[aria-label='Room details']").should("contain", "1 0 1");
+          cy.get("div[aria-label='Total price']").should("contain", "$4,000");
         });
         it("should be able to click 'Confirm' and see the toast", () => {
           cy.get("button[type='submit']").should("be.enabled");
           cy.get("button[type='submit']").click();
           cy.get("span").first().should("contain", "Welcome to");
-          cy.get("div[role='alert']").should(
+          cy.get("li[role='status']").should(
             "contain",
             "Booking created successfully!"
           );
@@ -110,7 +108,7 @@ describe("booked dates in hotel calendar", () => {
     cy.get("button[type='submit']").should("be.enabled");
     cy.get("button[type='submit']").click();
     cy.get("span").first().should("contain", "Welcome to");
-    cy.get("div[role='alert']").should(
+    cy.get("li[role='status']").should(
       "contain",
       "Booking created successfully!"
     );

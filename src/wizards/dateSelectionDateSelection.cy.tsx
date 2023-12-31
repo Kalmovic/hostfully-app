@@ -44,34 +44,34 @@ describe("<DateSelection />", () => {
   it("sets range", () => {
     cy.get("div[aria-label='Friday, January 26, 2024']").click();
     cy.get("div[aria-label='Saturday, January 27, 2024']").click();
-    cy.get("strong[aria-label='total-price']").should("contain", "$600");
+    cy.get("strong[aria-label='total-price']").should("contain", "$300");
     cy.get("button").contains("Continue").should("not.be.disabled");
   });
   it("changes total price when changing number of adults", () => {
     cy.get("div[aria-label='Friday, January 26, 2024']").click();
     cy.get("div[aria-label='Saturday, January 27, 2024']").click();
     cy.get("span[aria-label='value-Adults']").should("contain", "1");
-    cy.get("strong[aria-label='total-price']").should("contain", "$600");
+    cy.get("strong[aria-label='total-price']").should("contain", "$300");
     cy.get("button[aria-label='increment-Adults']").click();
     cy.get("span[aria-label='value-Adults']").should("contain", "2");
-    cy.get("strong[aria-label='total-price']").should("contain", "$1,200");
+    cy.get("strong[aria-label='total-price']").should("contain", "$800");
   });
   it("changes total price when changing number of children", () => {
     cy.get("div[aria-label='Friday, January 26, 2024']").click();
     cy.get("div[aria-label='Saturday, January 27, 2024']").click();
     cy.get("span[aria-label='value-Children']").should("contain", "0");
-    cy.get("strong[aria-label='total-price']").should("contain", "$600");
+    cy.get("strong[aria-label='total-price']").should("contain", "$300");
     cy.get("button[aria-label='increment-Children']").click();
     cy.get("span[aria-label='value-Children']").should("contain", "1");
-    cy.get("strong[aria-label='total-price']").should("contain", "$1,000");
+    cy.get("strong[aria-label='total-price']").should("contain", "$600");
   });
   it("changes total price when changing number of rooms", () => {
     cy.get("div[aria-label='Friday, January 26, 2024']").click();
     cy.get("div[aria-label='Saturday, January 27, 2024']").click();
     cy.get("span[aria-label='value-Rooms']").should("contain", "1");
-    cy.get("strong[aria-label='total-price']").should("contain", "$600");
+    cy.get("strong[aria-label='total-price']").should("contain", "$300");
     cy.get("button[aria-label='increment-Rooms']").click();
     cy.get("span[aria-label='value-Rooms']").should("contain", "2");
-    cy.get("strong[aria-label='total-price']").should("contain", "$1,200");
+    cy.get("strong[aria-label='total-price']").should("contain", "$800");
   });
 });
