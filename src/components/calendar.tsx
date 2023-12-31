@@ -123,7 +123,7 @@ export function BookCalendar({
     let basePrice = defaultPrice;
     basePrice *= numberOfAdults;
     basePrice += numberOfChildren * Math.ceil(defaultPrice / 2);
-    basePrice += numberOfRooms * defaultPrice;
+    basePrice += (numberOfRooms - 1) * defaultPrice;
 
     return isWeekend(date) ? basePrice * 2 : basePrice;
   };

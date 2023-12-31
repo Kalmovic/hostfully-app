@@ -165,7 +165,7 @@ export function DateSelection(props: PropsType) {
         Select the number of adults, children, room and the dates you want to
         book and check the availability.
       </DialogDescription>
-      <Flex direction="column" gap="4" width="100%">
+      <Flex direction="column" gap="6" width="100%">
         {isMobile ? (
           <Popover
             trigger={

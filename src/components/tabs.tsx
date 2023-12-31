@@ -6,6 +6,7 @@ import {
   Flex,
 } from "@radix-ui/themes";
 import styled from "styled-components";
+import { theme } from "../providers/theme";
 
 type Tabs = {
   value: string;
@@ -39,12 +40,11 @@ export function Tabs(props: TabsProps) {
   );
 }
 
-const StyledTabContent = styled(TabsContent)(({ theme }) => ({
+const StyledTabContent = styled(TabsContent)({
   padding: 16,
-  backgroundColor: theme.colors.surface,
   height: "100%",
   width: "100%",
-}));
+});
 
 const StyledTabsRoot = styled(TabsRoot)({
   width: "100%",
@@ -52,6 +52,7 @@ const StyledTabsRoot = styled(TabsRoot)({
 });
 
 const StyledTabsList = styled(TabsList)({
+  backgroundColor: theme.colors.white,
   "@media (max-width: 768px)": {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
