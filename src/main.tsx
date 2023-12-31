@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Theme>
       <ThemeProvider theme={theme}>
         <App />
-        <Toaster richColors />
+        <Toaster richColors closeButton />
       </ThemeProvider>
     </Theme>
   </React.StrictMode>
