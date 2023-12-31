@@ -13,8 +13,8 @@ import styled from "styled-components";
 import { Button } from "./button";
 import { toast } from "sonner";
 import { useBookingStore } from "../providers/bookingsProvider";
-import { useHotelStore } from "../providers/hotelsProvider";
 import { formatToDollar } from "../utils/formatCurrency";
+import { userCalendarProvider } from "../providers/userCalendarProvider";
 
 export const CancelBookingDialog = ({
   mode = "cards",
@@ -25,9 +25,7 @@ export const CancelBookingDialog = ({
 }) => {
   const deleteBooking = useBookingStore((state) => state.deleteBooking);
   const restoreBooking = useBookingStore((state) => state.restoreBooking);
-  const updateHotelAvailableDates = useHotelStore(
-    (state) => state.updateHotelAvailableDates
-  );
+  const updateCalendar = userCalendarProvider((state) => state.updateCalendar);
   const bookingsById = useBookingStore((state) => state.bookingsById);
   const booking = bookingsById[bookingId];
   return (
@@ -62,10 +60,9 @@ export const CancelBookingDialog = ({
                 variant="danger"
                 onClick={() => {
                   deleteBooking(bookingId);
-                  updateHotelAvailableDates({
-                    id: booking.title,
+                  updateCalendar({
                     bookedRangeDates: [booking.startDate, booking.endDate],
-                    action: "makeRangeAvailable",
+                    action: "makeAvailable",
                   });
                   toast.info("Booking has been cancelled", {
                     description: `You'll receive the refund in the value of ${formatToDollar.format(
@@ -75,13 +72,12 @@ export const CancelBookingDialog = ({
                       label: "Undo",
                       onClick: () => {
                         restoreBooking(bookingId);
-                        updateHotelAvailableDates({
-                          id: booking.title,
+                        updateCalendar({
                           bookedRangeDates: [
                             booking.startDate,
                             booking.endDate,
                           ],
-                          action: "makeRangeUnvailable",
+                          action: "makeUnavailable",
                         });
                         toast.success("Booking has been restored");
                       },

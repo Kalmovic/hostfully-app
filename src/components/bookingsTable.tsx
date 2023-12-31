@@ -61,7 +61,10 @@ export function BookingsTable(props: TableProps) {
                     </Flex>
                   </StyledTableCell>
                 ) : cell.rowKey === "bookingDetails" ? (
-                  <StyledTableCell aria-label={`row-${cell.rowKey}`}>
+                  <StyledTableCell
+                    key={cell.rowKey}
+                    aria-label={`row-${cell.rowKey}`}
+                  >
                     <StyledBookingDetails gap="2">
                       <Flex gap="1" align="center">
                         <Users size="15px" color={theme.colors.black} />
@@ -114,11 +117,17 @@ export function BookingsTable(props: TableProps) {
                     </StyledPeriodText>
                   </StyledTableCell>
                 ) : cell.rowKey === "actions" ? (
-                  <StyledTableCell aria-label={`row-${cell.rowKey}`}>
+                  <StyledTableCell
+                    key={cell.rowKey}
+                    aria-label={`row-${cell.rowKey}`}
+                  >
                     {cell.content}
                   </StyledTableCell>
                 ) : (
-                  <StyledTableCell aria-label={`row-${cell.rowKey}`}>
+                  <StyledTableCell
+                    key={cell.rowKey}
+                    aria-label={`row-${cell.rowKey}`}
+                  >
                     <Flex
                       gap="2"
                       align="center"

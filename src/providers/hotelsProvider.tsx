@@ -20,15 +20,6 @@ type Hotel = {
 
 type HotelStore = {
   hotels: Hotel[];
-  updateHotelAvailableDates: ({
-    id,
-    bookedRangeDates,
-    action,
-  }: {
-    id: string;
-    bookedRangeDates: string[];
-    action?: "makeRangeUnvailable" | "makeRangeAvailable";
-  }) => void;
 };
 
 const initialState = {
@@ -143,30 +134,6 @@ const initialState = {
   ],
 };
 
-export const useHotelStore = create<HotelStore>((set) => ({
+export const useHotelStore = create<HotelStore>(() => ({
   ...initialState,
-  updateHotelAvailableDates: ({
-    id,
-    bookedRangeDates,
-    action = "makeRangeUnvailable",
-  }) => {
-    set((state) => {
-      const updatedHotel = state.hotels.find((h) => h.title === id);
-      if (updatedHotel) {
-        if (action === "makeRangeUnvailable") {
-          updatedHotel.unavailableDates.push(bookedRangeDates);
-        } else {
-          updatedHotel.unavailableDates = updatedHotel.unavailableDates.filter(
-            (date) => date[0] !== bookedRangeDates[0]
-          );
-        }
-        return {
-          ...state,
-          hotels: state.hotels.map((h) => (h.title === id ? updatedHotel : h)),
-        };
-      } else {
-        return state;
-      }
-    });
-  },
 }));

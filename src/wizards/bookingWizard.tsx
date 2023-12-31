@@ -8,6 +8,7 @@ import { DialogClose, Flex, Text } from "@radix-ui/themes";
 import { Button } from "../components/button";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { userCalendarProvider } from "../providers/userCalendarProvider";
 
 enum BookingSteps {
   DATE_SELECTION = "DATE_SELECTION",
@@ -106,19 +107,21 @@ export function BookingWizard({
   const addBooking = useBookingStore((state) => state.addBooking);
   const updateBooking = useBookingStore((state) => state.updateBooking);
 
-  const updateHotelAvailableDates = useHotelStore(
-    (state) => state.updateHotelAvailableDates
-  );
   const hotels = useHotelStore((state) => state.hotels);
 
   const hotel = hotels.find((hotel) => hotel.title === hotelTitle)!;
 
+  const userUnavailableDates = userCalendarProvider(
+    (state) => state.unavailableDates
+  );
+  const updateCalendar = userCalendarProvider((state) => state.updateCalendar);
+
   const unavailableDates =
     props.mode === "edit"
-      ? hotel.unavailableDates.filter(
+      ? userUnavailableDates.filter(
           (date) => date[0] !== props.defaultBookingInfo.startDate
         )
-      : hotel.unavailableDates;
+      : userUnavailableDates;
 
   const onDateSelectionSubmit = (data: ReviewBookingData["data"]) => {
     setWizardState({
@@ -127,29 +130,25 @@ export function BookingWizard({
     });
   };
 
-  const onReviewBookingSubmit = async (
-    bookingInfo: ReviewBookingData["data"]
-  ) => {
+  const onReviewBookingSubmit = (bookingInfo: ReviewBookingData["data"]) => {
     if (props.mode === "edit") {
       if (
         props.defaultBookingInfo.startDate !== bookingInfo.startDate ||
         props.defaultBookingInfo.endDate !== bookingInfo.endDate
       ) {
-        await updateHotelAvailableDates({
-          id: hotel.title,
+        updateCalendar({
           bookedRangeDates: [
             props.defaultBookingInfo.startDate,
             props.defaultBookingInfo.endDate,
           ],
-          action: "makeRangeAvailable",
+          action: "makeAvailable",
         });
-        updateHotelAvailableDates({
-          id: hotel.title,
+        updateCalendar({
           bookedRangeDates: [bookingInfo.startDate, bookingInfo.endDate],
+          action: "makeUnavailable",
         });
       }
       updateBooking(props.bookingId, {
-        ...bookingInfo,
         description: hotel.description,
         id: props.bookingId,
         image: hotel.image,
@@ -158,6 +157,7 @@ export function BookingWizard({
         defaultPrice: hotelDefaultPrice,
         title: hotel.title,
         status: "Active",
+        ...bookingInfo,
       });
       toast.success("Booking updated successfully!", {
         description: (
@@ -199,9 +199,9 @@ export function BookingWizard({
         ),
       });
     } else {
-      updateHotelAvailableDates({
-        id: hotel.title,
+      updateCalendar({
         bookedRangeDates: [bookingInfo.startDate, bookingInfo.endDate],
+        action: "makeUnavailable",
       });
       addBooking({
         description: hotel.description,
@@ -211,8 +211,8 @@ export function BookingWizard({
         price: formatToDollar.format(bookingInfo.totalPrice),
         defaultPrice: hotelDefaultPrice,
         title: hotel.title,
-        ...bookingInfo,
         status: "Active",
+        ...bookingInfo,
       });
       toast.success("Booking created successfully!");
     }
@@ -242,7 +242,7 @@ export function BookingWizard({
                   ...data,
                 })
               }
-              unavailableDates={hotel.unavailableDates}
+              unavailableDates={unavailableDates}
               defaultPrice={hotelDefaultPrice}
             />
           )}

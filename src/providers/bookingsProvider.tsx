@@ -85,22 +85,27 @@ export const useBookingStore = create<BookingStore>()((set) => ({
         ...booking,
       } as Booking;
 
-      const bookings = state.bookings;
+      // const bookings = state.bookings;
 
-      const updatedBookingIndex = bookings.findIndex(
-        (booking) => booking.id === id
-      );
-      if (updatedBookingIndex !== -1) {
-        bookings.splice(updatedBookingIndex, 1, updatedBooking);
-      } else {
-        bookings.push(updatedBooking);
-      }
+      // const updatedBookingIndex = bookings.findIndex(
+      //   (booking) => booking.id === id
+      // );
+      // if (updatedBookingIndex !== -1) {
+      //   bookings.splice(updatedBookingIndex, 1, updatedBooking);
+      // } else {
+      //   bookings.push(updatedBooking);
+      // }
 
-      const updatedBookings =
-        state.bookings.length === 1 ? [updatedBooking] : bookings;
+      // const updatedBookings =
+      //   state.bookings.length === 1 ? [updatedBooking] : bookings;
 
       return {
-        bookings: updatedBookings,
+        bookings: state.bookings.map((b) => {
+          if (b.id === id) {
+            return updatedBooking;
+          }
+          return b;
+        }),
         bookingsById: {
           ...state.bookingsById,
           [id]: updatedBooking,
