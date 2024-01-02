@@ -24,7 +24,6 @@ export const CancelBookingDialog = ({
   bookingId: number;
 }) => {
   const deleteBooking = useBookingStore((state) => state.deleteBooking);
-  const restoreBooking = useBookingStore((state) => state.restoreBooking);
   const updateCalendar = userCalendarProvider((state) => state.updateCalendar);
   const bookingsById = useBookingStore((state) => state.bookingsById);
   const booking = bookingsById[bookingId];
@@ -68,20 +67,6 @@ export const CancelBookingDialog = ({
                     description: `You'll receive the refund in the value of ${formatToDollar.format(
                       booking.totalPrice
                     )} next week`,
-                    action: {
-                      label: "Undo",
-                      onClick: () => {
-                        restoreBooking(bookingId);
-                        updateCalendar({
-                          bookedRangeDates: [
-                            booking.startDate,
-                            booking.endDate,
-                          ],
-                          action: "makeUnavailable",
-                        });
-                        toast.success("Booking has been restored");
-                      },
-                    },
                   });
                 }}
               >
