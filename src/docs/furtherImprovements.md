@@ -1,38 +1,12 @@
 ## Further Improvements
 
-For further improvements on the providers, mainly on scalability, we can add a lookup for bookings. This remove the necessity to map over the bookings array to find the bookings for a specific provider. This will improve the scalability of the application as the number of bookings increase.
+For further improvements, these following features could be added:
 
-Example:
-
-```javascript
-const lookup = bookings.reduce((acc, booking) => {
-  return {
-    ...acc,
-    [booking.id]: booking,
-  };
-}, {});
-```
-
-```javascript
-// result
-const lookupById = {
-  1: {
-    id: 1,
-    startDate: "2017-10-01",
-    endDate: "2017-10-01",
-    ...
-  },
-  2: {
-    id: 1,
-    startDate: "2017-10-01",
-    endDate: "2017-10-01",
-    ...
-  },
-};
-```
-
-Resulting in a O(1) lookup time.
-
-```javascript
-const updatedBooking = lookupById[bookingId];
+```text
+- Global search with Command + K (Algolia Search like)
+- Add hotel details page with more information about the hotel
+- Add pagination for both Explore and Booking lists
+- Add sort on bookings table based on the headers
+- Add cypress tests for search and pagination
+- Add a new tab for the user profile with calendar
 ```
